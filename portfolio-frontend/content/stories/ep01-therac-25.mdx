@@ -1,0 +1,52 @@
+---
+title: "EP01 — The Bug That Changed Everything: The Therac-25"
+slug: "ep01-therac-25"
+summary: "How a race condition in a radiation therapy machine killed six people, and what it taught the world about software safety in medical systems."
+date: "2026-05-15"
+tags: ["Safety", "Medical", "Race Condition", "History", "Software Engineering"]
+---
+
+## The Machine
+
+In the mid-1980s, Atomic Energy of Canada Limited produced the Therac-25, a computer-controlled radiation therapy machine used to treat cancer patients. Unlike its predecessors — the Therac-6 and Therac-20 — the Therac-25 removed the hardware safety interlocks that physically prevented the machine from operating in dangerous modes. Instead, software was responsible for all safety checks.
+
+This was considered an improvement. Hardware interlocks are mechanical, they wear out, they're expensive, they add latency. Software is flexible, cheap to update, and theoretically more reliable. The engineers were confident. The machine passed regulatory review. Hospitals bought it.
+
+Between 1985 and 1987, the Therac-25 delivered at least six massive radiation overdoses. Three patients died directly from their injuries.
+
+## The Race Condition
+
+The root cause was a race condition — a timing dependency between two parts of the software that nobody had tested under real operating conditions.
+
+The machine had two modes: **Electron mode** (direct electron beam, low energy, safe at any dose) and **X-ray mode** (electron beam aimed at a tungsten target, which converts it to X-rays, but the beam energy must be *much* lower because you're no longer using the beam directly).
+
+The operator set the mode using a terminal. The software read the mode setting and configured the beam accordingly. The bug: if the operator typed *quickly* — specifically, if they corrected a typo by moving back and changing the mode field in under ~8 seconds — the software entered a state where it thought it was in **Electron mode** but had configured the beam for **X-ray mode**. The physical result was a full-power electron beam without the tungsten target absorbing it. Patients received doses 100 times the prescribed amount.
+
+The timing window was so narrow that it only occurred when experienced operators used the machine — because experienced operators typed fast. New operators, typing slowly, never triggered it.
+
+## Why It Took So Long
+
+The most disturbing part of the Therac-25 story is not the bug itself — race conditions were a known hazard in 1985. It's how long it took to find it.
+
+**No error logging.** The machine displayed cryptic error codes when it faulted ("Malfunction 54") but didn't record what had caused the fault. Each incident produced no traceable log.
+
+**Manufacturer denial.** AECL initially told hospitals that a machine malfunction at this dose level was "physically impossible." Hospitals believed them. Patients who reported burning sensations were told it was a normal sensation or psychological.
+
+**Diffuse responsibility.** Hospitals, regulators, and the manufacturer each assumed the others were monitoring the situation. Nobody was.
+
+**No post-market surveillance.** There was no system for correlating adverse events across different hospitals using the same device. The pattern — multiple overdoses, same machine model, same cryptic error code — was invisible until a physicist at a single hospital refused to drop it.
+
+## What Changed
+
+The Therac-25 case directly shaped how we think about software safety in regulated industries:
+
+- **Hardware interlocks exist for a reason.** Removing them to reduce cost or add flexibility requires proving the software equivalent is demonstrably safer — not just asserting it.
+- **Defense in depth isn't optional.** Safety-critical systems need multiple independent failure checks, not one software module doing everything.
+- **Error messages must be actionable.** "Malfunction 54" is not a safety system. Logging what caused the fault is not optional.
+- **Testing must include timing.** A race condition that only appears under fast operation will not appear in slow, deliberate test runs.
+
+The incident is taught in almost every software engineering ethics course. It's also a reminder that "the software handles it" is not an answer — it's the beginning of a much longer question.
+
+---
+
+*Behind the Bit is a series on the stories behind the machines and systems we take for granted. I write it because computing history is full of people making consequential decisions under uncertainty, and those decisions still shape what we build today.*

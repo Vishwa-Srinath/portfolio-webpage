@@ -1,0 +1,53 @@
+---
+title: "4-bit Nanoprocessor — VHDL / FPGA"
+slug: "nanoprocessor-vhdl"
+summary: "A fully functional 4-bit nanoprocessor designed in VHDL and synthesized on a Basys 3 FPGA, featuring a custom instruction set, ALU, register file, and 8-instruction memory."
+date: "2025-12-01"
+tags: ["VHDL", "FPGA", "Digital Design", "Basys 3", "ModelSim"]
+coverImage: "/images/projects/nanoprocessor-cover.png"
+repoUrl: "https://github.com/Vishwa-Srinath/nanoprocessor-vhdl"
+featured: true
+---
+
+## The Problem
+
+The CS2022 Digital Design module assigns a nanoprocessor as the capstone project — which sounds more tractable than it is. You're building a real CPU: instruction fetch, decode, execute, writeback, with a custom 8-instruction ISA, all in VHDL, all targeted at real hardware. The challenge isn't just getting it to simulate correctly in ModelSim; it's getting the timing closure right so it synthesizes and runs at target frequency on the Basys 3 board.
+
+## Architecture
+
+The processor is a simple single-cycle design:
+
+- **4-bit ALU** — Add, Subtract, AND, with carry/zero flags
+- **Register File** — 8 × 4-bit registers (R0–R7), dual read port, single write port
+- **Instruction Memory** — 8 × 12-bit ROM loaded with the program (12-bit instruction width: 3-bit opcode + operands)
+- **Program Counter** — 3-bit, increments each cycle, supports conditional branch
+- **Instruction Decoder** — combinational logic mapping opcode to control signals
+- **Slow Clock Generator** — divides the 100 MHz board clock to a human-observable ~3 Hz for LED step-through demo
+
+**ISA (8 instructions, 3-bit opcode):**
+| Opcode | Mnemonic | Operation |
+|--------|----------|-----------|
+| 000 | NEG Rx | Rx ← -Rx (two's complement) |
+| 001 | ADD Rx, Ry | Rx ← Rx + Ry |
+| 010 | MOV Rx, Imm | Rx ← 4-bit immediate |
+| 011 | MOV Rx, Ry | Rx ← Ry |
+| 100 | JZR Rx, Imm | If Rx = 0, PC ← Imm |
+| 101 | AND Rx, Ry | Rx ← Rx AND Ry |
+| 110 | reserved | — |
+| 111 | reserved | — |
+
+## Technical Decisions
+
+**Single-cycle over pipelined**: At 3 Hz demo clock and 8-instruction memory, pipelining would have added hazard complexity (forwarding unit, hazard detection) with no visible benefit. Single-cycle is correct-by-construction for this scale and keeps the datapath readable.
+
+**VHDL over Verilog**: Required by the module; VHDL's strong typing caught several bus-width mismatches at compile time that would have been silent in Verilog.
+
+**Test bench first**: Wrote ModelSim test benches before connecting major components. This caught a register file addressing bug (off-by-one in the write-enable mux) before it became a board-level mystery.
+
+**Slow clock on-chip**: Implemented the clock divider as a VHDL component rather than using the Basys 3's onboard clock wizard, to keep the design self-contained and board-agnostic.
+
+## Results
+
+Synthesized successfully on the Basys 3 board and executed a demo program (Fibonacci sequence via add loop) correctly at 3 Hz, with register values displayed on the 7-segment display. Timing report showed comfortable margin at 100 MHz (the fast clock used internally).
+
+**What I'd do differently**: The instruction memory is ROM — a writeable RAM with a loader would allow programs to be changed without re-synthesizing, making it genuinely useful as a teaching tool rather than a one-program demo. That's the natural next step.

@@ -1,0 +1,39 @@
+---
+title: "AgenTrix 2026 — Agentic Insurance Assistant"
+slug: "agentrix-2026"
+summary: "A multi-agent FastAPI + Supabase pgvector system that automates insurance claim intake, triage, and document retrieval for AgenTrix 2026."
+date: "2026-05-01"
+tags: ["FastAPI", "Pydantic AI", "Supabase", "pgvector", "n8n", "Gemini Flash", "Python"]
+coverImage: "/images/projects/agentrix-cover.png"
+repoUrl: "https://github.com/Vishwa-Srinath/agentrix-2026"
+featured: true
+---
+
+## The Problem
+
+Insurance claim processing is fundamentally a document-routing problem dressed up in domain jargon. An adjuster receives a claim, hunts through policy documents to find the relevant clause, cross-references historical precedents, and writes a triage decision — a workflow that is mechanically repetitive but requires correctly interpreting ambiguous natural language. AgenTrix 2026 asked teams to build AI systems that could reduce this loop.
+
+## What We Built
+
+A multi-agent orchestration system where:
+
+1. **Intake Agent** — receives claim text via FastAPI endpoint, extracts structured fields (claimant, policy number, incident type, amount) using Pydantic AI with Gemini Flash as the backbone model.
+2. **Retrieval Agent** — embeds the extracted claim summary and runs cosine similarity search against a Supabase pgvector store of policy documents and past claim decisions.
+3. **Triage Agent** — receives the retrieval results and produces a structured recommendation (approve/escalate/reject with reason), again via Pydantic AI structured output.
+4. **Notification Workflow** — n8n picks up the triage decision and routes it: approved claims fire a webhook, escalations create a Supabase row for human review.
+
+## Technical Decisions
+
+**Gemini 2.0 Flash over GPT-4**: Chose Flash for latency — claim intake loops needed sub-2s round trips, and Flash's structured output support via Pydantic AI was sufficient for the extraction tasks. Accepted the trade-off of lower complex reasoning depth, which wasn't needed for field extraction.
+
+**Pydantic AI over raw LangChain**: LangChain's abstractions added ceremony without giving us agent handoff clarity we needed. Pydantic AI's typed agent contracts mapped directly to the FastAPI schema layer, reducing validation bugs between agents.
+
+**pgvector over a dedicated vector DB**: Supabase pgvector kept the infrastructure count at one (single Postgres instance handles relational + vector workloads). At our document volume (~500 policy clauses), IVFFlat indexing wasn't necessary — flat cosine scan was fast enough and simpler to reason about.
+
+**n8n for orchestration side effects**: Rather than building notification and audit-trail logic into FastAPI routes, n8n handles the side-effect workflows. This meant we could iterate on notification logic (Slack vs. email vs. webhook) without touching the core API.
+
+## Results
+
+Completed the hackathon demo with working end-to-end claim intake to triage decision in ~1.8s average. The system correctly escalated ambiguous claims (those where retrieved policy clauses had low similarity scores) rather than guessing — a deliberate design choice that judges responded well to.
+
+**What I'd do differently**: The retrieval step needs a re-ranking pass before sending to the Triage Agent — top-k cosine similarity can surface semantically close but contextually irrelevant clauses. A cross-encoder reranker (even a small one) would improve the triage accuracy meaningfully.

@@ -2,26 +2,20 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { X, Menu } from "lucide-react";
-
-const navLinks = [
-  { href: "/projects", label: "Projects" },
-  { href: "/learn", label: "Learn" },
-  { href: "/stories", label: "Stories" },
-  { href: "/notes", label: "Notes" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
+import { X, Menu, ChevronDown } from "lucide-react";
+import { navigation } from "@/lib/navigation";
+import { cn } from "@/lib/cn";
 
 export function MobileNav(): React.ReactNode {
   const [isOpen, setIsOpen] = useState(false);
+  const [openSection, setOpenSection] = useState<string | null>(null);
 
-  // Lock body scroll when open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
+      setOpenSection(null);
     }
     return () => {
       document.body.style.overflow = "";
@@ -53,7 +47,9 @@ export function MobileNav(): React.ReactNode {
         }`}
       >
         <div className="flex items-center justify-between border-b border-[var(--border)] p-4">
-          <span className="text-lg font-semibold">Menu</span>
+          <span className="text-lg font-bold">
+            VS<span className="text-[var(--accent-cyan)]">.</span>
+          </span>
           <button
             onClick={() => setIsOpen(false)}
             className="rounded-lg p-2 transition-colors hover:bg-[var(--bg-elevated)]"
@@ -64,16 +60,50 @@ export function MobileNav(): React.ReactNode {
         </div>
 
         <nav className="flex flex-col gap-1 p-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className="rounded-lg px-4 py-3 text-base font-medium transition-colors hover:bg-[var(--bg-elevated)]"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navigation.map((item) =>
+            item.children ? (
+              <div key={item.href}>
+                <button
+                  onClick={() => setOpenSection(openSection === item.label ? null : item.label)}
+                  className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-base font-medium transition-colors hover:bg-[var(--bg-elevated)]"
+                >
+                  {item.label}
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 text-[var(--fg-muted)] transition-transform duration-200",
+                      openSection === item.label ? "rotate-180" : ""
+                    )}
+                  />
+                </button>
+                {openSection === item.label && (
+                  <div className="ml-4 mt-1 flex flex-col gap-1">
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        onClick={() => setIsOpen(false)}
+                        className="rounded-lg px-4 py-2.5 transition-colors hover:bg-[var(--bg-elevated)]"
+                      >
+                        <span className="text-sm font-medium" style={{ color: child.accent }}>
+                          {child.label}
+                        </span>
+                        <p className="text-xs text-[var(--fg-muted)]">{child.description}</p>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className="rounded-lg px-4 py-3 text-base font-medium transition-colors hover:bg-[var(--bg-elevated)]"
+              >
+                {item.label}
+              </Link>
+            )
+          )}
         </nav>
       </div>
     </>
