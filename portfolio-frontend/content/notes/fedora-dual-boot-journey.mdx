@@ -1,0 +1,40 @@
+---
+title: "Switching to Fedora — Six Months In"
+slug: "fedora-dual-boot-journey"
+summary: "What actually changes when you move your dev environment from Windows to Fedora Linux, the things nobody warned me about, and whether I'd do it again."
+date: "2026-06-01"
+tags: ["Linux", "Fedora", "Development", "Tools", "Personal"]
+---
+
+## Why I Switched
+
+I didn't plan to switch operating systems during a semester. The decision started with a VHDL toolchain problem: ModelSim on Windows 11 was fighting with the USB-JTAG driver for the Basys 3 board, producing intermittent "device not found" errors that I couldn't reproduce reliably enough to debug. A labmate running Fedora had zero issues. That was enough.
+
+I'd been wanting to spend more time on Linux anyway — most of the servers I'd be deploying to run some flavour of Linux, and the terminal friction of Git Bash and WSL had quietly been costing me time every day.
+
+## What Actually Changes
+
+**The things that got better immediately:**
+
+- Terminal is a first-class citizen. No path escaping issues, no WSL file system translation lag, no Windows Defender scanning my `node_modules` on every `npm install`.
+- Docker performance is noticeably faster. File watching in `npm run dev` responds in milliseconds instead of occasionally hanging.
+- The Basys 3 board worked immediately. Plugged in, showed up in `/dev/ttyUSB0`, flashed without touching a driver installer.
+
+**The things that required adjustment:**
+
+- `dnf` instead of `apt`. The mental model is identical; the command names are different. Takes a week to stop reaching for `apt`.
+- No Adobe software, no native Microsoft Office. I use LibreOffice for documents (fine for academic work) and Figma in the browser. Not a dealbreaker, but worth knowing.
+- Font rendering required tuning. The default subpixel hinting on Fedora didn't match what I was used to. Twenty minutes in GNOME Tweaks fixed it.
+
+**The things that took real work:**
+
+- Node.js version management. The Fedora repo ships an older Node. Used `nvm` to manage versions — but I had to remember to source the nvm script in every new shell session until I added it to `.bashrc`.
+- VS Code extensions behaved identically. This surprised me — I expected friction. There was none.
+
+## Six Months Later
+
+I won't switch back. The dev loop is genuinely faster, the toolchain headaches (specifically anything involving USB hardware or containerization) are gone, and I've learned things about how Linux systems work that I wouldn't have picked up staying in Windows.
+
+The one ongoing friction: video calls. Teams works in the browser but lacks some features, and Zoom's Linux client has occasional screensharing issues. If your life involves heavy video calling, budget time for figuring out your setup.
+
+**Would I recommend it?** Yes, with the caveat that the first two weeks are slower while you rebuild muscle memory. If you can absorb that cost during a low-pressure period, it pays back quickly.

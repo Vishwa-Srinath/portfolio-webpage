@@ -1,0 +1,102 @@
+---
+title: "Kruskal's Algorithm — MST from Edge Sorting"
+slug: "kruskals-mst"
+summary: "How Kruskal's algorithm builds a Minimum Spanning Tree by greedily picking the lightest safe edge, and why Union-Find makes it efficient."
+date: "2026-04-10"
+tags: ["Graph Theory", "Greedy", "Union-Find", "MST", "Python"]
+---
+
+## The Core Idea
+
+Kruskal's algorithm answers a simple question: given a weighted undirected graph, find the subset of edges that connects all vertices with the minimum total weight — without forming any cycles.
+
+The approach is disarmingly straightforward: sort all edges by weight, then greedily add each edge to the MST if it doesn't create a cycle. Stop when you have `V - 1` edges (where `V` is the number of vertices).
+
+## Why It Works — The Cut Property
+
+The correctness rests on the **cut property** of MSTs: for any partition of vertices into two sets (a "cut"), the minimum weight edge crossing the cut is always in some MST. Kruskal's is a direct application — at each step, we're effectively finding the minimum weight edge crossing some cut.
+
+## The Cycle Detection Problem
+
+Naively checking for cycles after each edge addition would be O(V) per edge, giving O(VE) overall — too slow. The standard fix is **Union-Find** (also called Disjoint Set Union, DSU):
+
+```python
+class UnionFind:
+    def __init__(self, n: int):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, x: int) -> int:
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # path compression
+        return self.parent[x]
+
+    def union(self, x: int, y: int) -> bool:
+        px, py = self.find(x), self.find(y)
+        if px == py:
+            return False  # already in the same component — would create a cycle
+        # union by rank
+        if self.rank[px] < self.rank[py]:
+            px, py = py, px
+        self.parent[py] = px
+        if self.rank[px] == self.rank[py]:
+            self.rank[px] += 1
+        return True
+```
+
+With path compression and union by rank, each `find` and `union` operation runs in near-constant time (amortized O(α(n)), where α is the inverse Ackermann function — for all practical n, this is ≤ 4).
+
+## Full Implementation
+
+```python
+from typing import List, Tuple
+
+def kruskal(n: int, edges: List[Tuple[int, int, int]]) -> int:
+    """
+    Find the MST weight of a graph with n vertices.
+
+    Args:
+        n: Number of vertices (0-indexed).
+        edges: List of (weight, u, v) tuples.
+
+    Returns:
+        Total weight of the MST, or -1 if the graph is disconnected.
+    """
+    uf = UnionFind(n)
+    edges.sort()  # sort by weight (first element of tuple)
+
+    mst_weight = 0
+    edges_used = 0
+
+    for weight, u, v in edges:
+        if uf.union(u, v):
+            mst_weight += weight
+            edges_used += 1
+            if edges_used == n - 1:
+                break  # MST is complete
+
+    return mst_weight if edges_used == n - 1 else -1  # -1 if disconnected
+```
+
+## Complexity
+
+| Operation | Time | Space |
+|-----------|------|-------|
+| Sort edges | O(E log E) | O(1) extra |
+| Union-Find operations | O(E α(V)) ≈ O(E) | O(V) |
+| **Total** | **O(E log E)** | **O(V + E)** |
+
+Edge sorting dominates. This is optimal for sparse graphs. For dense graphs (E ≈ V²), Prim's algorithm with a Fibonacci heap achieves O(E + V log V) — which matters when E is very large.
+
+## Kruskal's vs. Prim's — When to Use Which
+
+- **Kruskal's** is better for **sparse graphs** (E ≪ V²) because sorting is O(E log E) and Union-Find is nearly linear. Also works naturally on disconnected graphs (just returns a minimum spanning forest).
+- **Prim's** is better for **dense graphs** — iterating from a start vertex and always picking the minimum weight edge to an unvisited vertex is more efficient when E is close to V².
+
+For competitive programming: reach for Kruskal's first unless the graph is explicitly described as dense.
+
+## Common Mistakes
+
+1. **Forgetting the disconnected case** — if the graph has multiple components, you won't get V-1 edges. Always check `edges_used == n - 1`.
+2. **Sorting by weight but not handling equal weights** — ties are fine, any MST with the same total weight is valid.
+3. **Confusing 0-indexed vs. 1-indexed vertices** — Union-Find initialization must match your vertex numbering.

@@ -1,0 +1,45 @@
+[project]
+name = "portfolio-api"
+version = "1.0.0"
+description = "Personal portfolio backend"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]==0.104.1",
+    "uvicorn[standard]==0.24.0",
+    "pydantic-settings==2.1.0",
+    "python-dotenv==1.0.0",
+    "email-validator==2.1.0",
+    "supabase==2.4.0",
+    "httpx==0.25.2",
+    "slowapi==0.1.9",
+    "python-json-logger==2.0.7",
+    "resend==0.3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==7.4.3",
+    "pytest-asyncio==0.21.1",
+    "pytest-cov==4.1.0",
+    "black==23.12.0",
+    "ruff==0.1.8",
+    "mypy==1.7.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+select = ["E", "F", "W", "I"]
+
+[tool.pyright]
+venvPath = "."
+venv = "venv"
+pythonVersion = "3.14"

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "2026-07-01-pydantic-ai-v2",
+    "date": "2026-07-01",
+    "title": "Pydantic AI v2 — structured multi-agent orchestration",
+    "category": "framework",
+    "status": "trying",
+    "summary": "Testing the new agent handoff API against the AgenTrix orchestration pattern. Cleaner than manually wiring FastAPI dependency chains for tool routing.",
+    "link": "https://ai.pydantic.dev/"
+  },
+  {
+    "id": "2026-06-20-supabase-branching",
+    "date": "2026-06-20",
+    "title": "Supabase database branching",
+    "category": "infra",
+    "status": "watching",
+    "summary": "Per-PR database branches would eliminate the need for a separate staging project. Waiting for pricing clarity before adopting on the portfolio backend.",
+    "link": "https://supabase.com/docs/guides/platform/branching"
+  },
+  {
+    "id": "2026-06-15-gemini-flash-2",
+    "date": "2026-06-15",
+    "title": "Gemini 2.0 Flash — low-latency reasoning upgrade",
+    "category": "model",
+    "status": "adopted",
+    "summary": "Swapped from Flash 1.5 to 2.0 Flash in AgenTrix for structured extraction tasks. Noticeably faster tool call resolution with comparable accuracy on insurance domain data.",
+    "link": "https://deepmind.google/technologies/gemini/flash/"
+  },
+  {
+    "id": "2026-06-10-nextjs-16-turbopack",
+    "date": "2026-06-10",
+    "title": "Next.js 16 + Turbopack in dev",
+    "category": "framework",
+    "status": "adopted",
+    "summary": "This portfolio itself runs on Next.js 16 with Turbopack. Sub-500ms HMR makes the dev loop noticeably snappier than webpack mode — no breaking changes migrating from 15.",
+    "link": "https://nextjs.org/blog/next-16"
+  },
+  {
+    "id": "2026-06-05-n8n-self-hosted",
+    "date": "2026-06-05",
+    "title": "n8n self-hosted — workflow automation for agentic pipelines",
+    "category": "tool",
+    "status": "adopted",
+    "summary": "Used in AgenTrix to orchestrate document ingestion and notification workflows without writing glue code. Docker-based self-hosting is straightforward with Render.",
+    "link": "https://n8n.io"
+  },
+  {
+    "id": "2026-05-28-pgvector",
+    "date": "2026-05-28",
+    "title": "pgvector on Supabase — vector search for RAG",
+    "category": "infra",
+    "status": "adopted",
+    "summary": "Used cosine similarity search via pgvector in AgenTrix for claim document retrieval. IVFFlat index requires minimum rows before it's useful — flat scan is fine at small scale.",
+    "link": "https://github.com/pgvector/pgvector"
+  },
+  {
+    "id": "2026-05-20-rust-ownership",
+    "date": "2026-05-20",
+    "title": "Rust — working through ownership model",
+    "category": "language",
+    "status": "watching",
+    "summary": "Reading 'The Rust Book' slowly alongside semester work. Not targeting a project yet — building mental model for when WebAssembly becomes relevant to my stack.",
+    "link": "https://doc.rust-lang.org/book/"
+  },
+  {
+    "id": "2026-05-10-basys3-vhdl",
+    "date": "2026-05-10",
+    "title": "Basys 3 + VHDL — FPGA hands-on",
+    "category": "hardware",
+    "status": "adopted",
+    "summary": "Used for the nanoprocessor project. VHDL test bench simulation in ModelSim before flashing to board is the workflow — dramatically reduces board-debug cycles.",
+    "link": "https://digilent.com/reference/programmable-logic/basys-3/start"
+  },
+  {
+    "id": "2026-04-15-tailwind-v4",
+    "date": "2026-04-15",
+    "title": "Tailwind CSS v4 — @theme directive, no config file",
+    "category": "framework",
+    "status": "adopted",
+    "summary": "This portfolio uses Tailwind v4. The @theme directive replaces tailwind.config.ts and CSS variables are first-class. Migration from v3 took under an hour for a fresh project.",
+    "link": "https://tailwindcss.com/blog/tailwindcss-v4"
+  },
+  {
+    "id": "2026-04-05-attention-is-all-you-need",
+    "date": "2026-04-05",
+    "title": "Re-reading: Attention Is All You Need (Vaswani et al.)",
+    "category": "paper",
+    "status": "watching",
+    "summary": "Revisiting the transformer paper after working through encoder-decoder patterns in FastAPI. The positional encoding section makes more sense once you've built sequence models.",
+    "link": "https://arxiv.org/abs/1706.03762"
+  }
+]

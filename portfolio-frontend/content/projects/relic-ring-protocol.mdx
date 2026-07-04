@@ -1,0 +1,37 @@
+---
+title: "Relic Ring Protocol — LAUNCH26 Hackathon"
+slug: "relic-ring-protocol"
+summary: "A real-time multiplayer puzzle-hunt backend built in 24 hours for LAUNCH26, using FastAPI WebSockets, Redis pub/sub, and a procedural clue-generation pipeline."
+date: "2026-03-15"
+tags: ["FastAPI", "WebSockets", "Redis", "Python", "TypeScript", "Real-time"]
+coverImage: "/images/projects/relic-ring-cover.png"
+repoUrl: "https://github.com/Vishwa-Srinath/relic-ring-protocol"
+featured: true
+---
+
+## The Problem
+
+LAUNCH26 gave teams 24 hours and the prompt: "build something multiplayer." Most teams reached for games or collaborative tools. We wanted something that felt more like an experience — a real-time puzzle hunt where clues unlock in sequence, teams race to decode them, and the server orchestrates progression state so no client can cheat by jumping ahead.
+
+## What We Built
+
+A puzzle-hunt platform with:
+
+- **FastAPI WebSocket server** — each "room" is a persistent connection group; the server pushes clue reveals and team progress events to all connected clients in real time
+- **Redis pub/sub** — used as the event bus between the puzzle logic layer and the WebSocket broadcast layer, so the two concerns are decoupled (important when multiple server instances might be running)
+- **Procedural clue generation** — a small pipeline that takes a "seed" (a theme word) and generates a chain of encoded clues (base64 → Caesar cipher → anagram) with known solutions, so we could demo with arbitrary themes without hand-authoring each puzzle
+- **Next.js frontend** — client subscribes to the room WebSocket, renders current clue and team leaderboard, handles input validation locally before submitting to server
+
+## Technical Decisions
+
+**FastAPI WebSockets over socket.io**: Socket.io's Python server (python-socketio) adds an abstraction layer that we'd have to fight with for custom room management. FastAPI's native WebSocket support gave us direct control over the connection lifecycle and message framing.
+
+**Redis pub/sub over in-memory broadcast**: An in-memory dict of connections would have worked for a single server, but Redis pub/sub meant we could demo with two server replicas running simultaneously (which we did for load testing in hour 20 — it held). More importantly, pub/sub is the right pattern here: the puzzle logic component publishes an event, it doesn't know or care how many WebSocket handlers are listening.
+
+**Procedural clues over hand-authored content**: We had 24 hours. Writing puzzle content by hand would have consumed half of it. The generator trades puzzle quality (generated clues are mechanical, not elegant) for demo flexibility and replayability.
+
+## Results
+
+Working demo by hour 22: three teams connected simultaneously, solving a 5-clue chain with live leaderboard updates under 100ms latency on the conference WiFi. The puzzle was thin on real content (procedural generation shows its seams quickly) but the infrastructure held.
+
+**What I'd do differently**: The clue generation pipeline should be pluggable — a YAML file of hand-crafted clues for production, procedural generation only as a fallback. The current architecture actually supports this (the generator is behind a single interface), but we didn't have time to write the YAML schema. That, and proper reconnection handling — if a client drops and reconnects, they should resume their room state, which currently requires a manual rejoin.
