@@ -5,10 +5,9 @@ import type { RadarEntry } from "@/lib/radar";
 import { RadarCard } from "./RadarCard";
 
 const STATUS_FILTERS = ["all", "adopted", "trying", "watching", "dropped"] as const;
-const CATEGORIES = ["all", "framework", "infra", "language", "hardware", "paper", "tool", "model"] as const;
 
 type StatusFilter = (typeof STATUS_FILTERS)[number];
-type CategoryFilter = (typeof CATEGORIES)[number];
+type CategoryFilter = "all" | "framework" | "infra" | "language" | "hardware" | "paper" | "tool" | "model" | string;
 
 export function RadarList({ entries }: { entries: RadarEntry[] }) {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");

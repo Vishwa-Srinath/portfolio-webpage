@@ -8,8 +8,11 @@ export function ThemeToggle(): React.ReactNode {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Prevent hydration mismatch
-  useEffect(() => setMounted(true), []);
+  // Prevent hydration mismatch — this is the canonical next-themes pattern
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
     return (

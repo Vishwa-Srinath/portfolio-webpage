@@ -10,17 +10,19 @@ export function MobileNav(): React.ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const [openSection, setOpenSection] = useState<string | null>(null);
 
+  // Lock body scroll when drawer is open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-      setOpenSection(null);
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
+
+  // Reset accordion when drawer closes
+  const closeDrawer = () => {
+    setIsOpen(false);
+    setOpenSection(null);
+  };
 
   return (
     <>
@@ -36,7 +38,7 @@ export function MobileNav(): React.ReactNode {
       {isOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
-          onClick={() => setIsOpen(false)}
+          onClick={closeDrawer}
         />
       )}
 
@@ -51,7 +53,7 @@ export function MobileNav(): React.ReactNode {
             VS<span className="text-[var(--accent-cyan)]">.</span>
           </span>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={closeDrawer}
             className="rounded-lg p-2 transition-colors hover:bg-[var(--bg-elevated)]"
             aria-label="Close menu"
           >
@@ -94,10 +96,10 @@ export function MobileNav(): React.ReactNode {
                 )}
               </div>
             ) : (
-              <Link
+                <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setIsOpen(false)}
+                onClick={closeDrawer}
                 className="rounded-lg px-4 py-3 text-base font-medium transition-colors hover:bg-[var(--bg-elevated)]"
               >
                 {item.label}
