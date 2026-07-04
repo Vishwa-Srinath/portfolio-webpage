@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env.local
+
+# Environment files — NEVER commit secrets
+# .env is committed as a template (no real secrets), but override files are not
+.env.local
+.env.*.local
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Test artifacts
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+
+# Logs
+logs/*.log
+
+# Editor
+.idea/
+.vscode/
+*.sw[op]
+
+# OS
+.DS_Store
+Thumbs.db
