@@ -1,38 +1,56 @@
-# Byte-compiled / optimized / DLL files
+# ============================================================
+# ROOT .gitignore — portfolio-webpage monorepo
+# ============================================================
+
+# ----- Secrets / Environment (CRITICAL) ----------------------
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+# Allow the example template
+!.env.example
+
+# ----- Python / FastAPI (portfolio-api) ----------------------
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Virtual environments
+*.pyo
+*.pyd
+.Python
 venv/
 .venv/
 env/
-.env.local
-
-# Environment files — NEVER commit secrets
-# .env is committed as a template (no real secrets), but override files are not
-.env.local
-.env.*.local
-
-# Distribution / packaging
+ENV/
+*.egg-info/
 dist/
 build/
-*.egg-info/
-
-# Test artifacts
-.coverage
-.coverage.*
-htmlcov/
+.mypy_cache/
 .pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.log
+logs/
 
-# Logs
-logs/*.log
+# ----- Node / Next.js (portfolio-frontend) -------------------
+node_modules/
+.next/
+out/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Editor
-.idea/
-.vscode/
-*.sw[op]
-
-# OS
+# ----- Editor / OS ------------------------------------------
 .DS_Store
+*.pem
+.vscode/
+.idea/
+*.tsbuildinfo
+*.sw[op]
 Thumbs.db
+
+# ----- Vercel / Render artifacts ----------------------------
+.vercel

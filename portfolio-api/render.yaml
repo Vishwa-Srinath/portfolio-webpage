@@ -1,0 +1,50 @@
+# render.yaml — Render Infrastructure-as-Code
+# Docs: https://render.com/docs/blueprint-spec
+#
+# IMPORTANT: This file declares the service shape.
+# All SECRET environment variables (keys, passwords) must be set
+# directly in the Render dashboard under Environment > Environment Variables.
+# Never put real secrets in this file.
+#
+# How to deploy:
+#   1. Create account at render.com (sign up with GitHub)
+#   2. Dashboard > New > Blueprint > connect this repo
+#   3. Render reads this file and creates the service automatically
+#   4. Then go to the service's Environment tab and add the secret vars
+
+services:
+  - type: web
+    name: portfolio-api
+    runtime: docker
+    # Render will build and run your existing Dockerfile
+    dockerfilePath: ./Dockerfile
+    
+    # Health check — Render uses this to know when the service is ready
+    # and to decide whether to keep it alive or restart it
+    healthCheckPath: /api/v1/health
+    
+    # Free plan settings
+    plan: free
+    
+    # Auto-deploy every time you push to 'main'
+    autoDeploy: true
+    
+    # Non-secret environment variables (safe to commit)
+    # SECRET vars go in the Render dashboard only, never here
+    envVars:
+      - key: DEBUG
+        value: "false"
+      - key: RATE_LIMIT_REQUESTS
+        value: "5"
+      - key: RATE_LIMIT_WINDOW_SECONDS
+        value: "3600"
+      
+      # ── SET THESE IN THE RENDER DASHBOARD (not here) ──────────────────
+      # ALLOWED_ORIGINS          → https://your-project.vercel.app,http://localhost:3000
+      # SUPABASE_URL             → https://ifmkrkhpkanpjcorzkmm.supabase.co
+      # SUPABASE_ANON_KEY        → eyJhbGci... (from Supabase dashboard)
+      # SUPABASE_SERVICE_ROLE_KEY→ eyJhbGci... (from Supabase dashboard)
+      # RESEND_API_KEY           → re_b1kDbJeo_... (from resend.com/api-keys)
+      # SMTP_FROM_EMAIL          → noreply@yourdomain.com (or your gmail)
+      # CONTACT_NOTIFICATION_EMAIL → your personal email to receive form submissions
+      # SENTRY_DSN               → https://c8781bb8...@o4511635444137984.ingest.de.sentry.io/...
