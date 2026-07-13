@@ -1,0 +1,102 @@
+name: CI — Lint, Type-check & Test
+
+# Runs on every push and pull request targeting main.
+# This is the gate that ensures nothing broken gets deployed.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ──────────────────────────────────────────────────────────────
+  # Backend: Python / FastAPI
+  # ──────────────────────────────────────────────────────────────
+  backend:
+    name: Backend (FastAPI)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: portfolio-api
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: portfolio-api/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install dev dependencies (pytest, ruff)
+        run: pip install pytest==7.4.3 pytest-asyncio==0.21.1 pytest-cov==4.1.0 ruff==0.1.8
+
+      # Create a minimal .env so tests can import Settings without real secrets
+      - name: Create test .env
+        run: |
+          cat > .env << 'EOF'
+          DEBUG=false
+          ALLOWED_ORIGINS=http://localhost:3000
+          SUPABASE_URL=https://test.supabase.co
+          SUPABASE_ANON_KEY=test_anon_key
+          SUPABASE_SERVICE_ROLE_KEY=test_service_role_key
+          RESEND_API_KEY=test_resend_key
+          SMTP_FROM_EMAIL=noreply@test.com
+          CONTACT_NOTIFICATION_EMAIL=test@test.com
+          RATE_LIMIT_REQUESTS=5
+          RATE_LIMIT_WINDOW_SECONDS=3600
+          SENTRY_DSN=
+          EOF
+
+      - name: Lint with ruff
+        run: ruff check app/ --select E,W,F --ignore E501
+
+      - name: Run tests with coverage
+        run: |
+          pytest tests/ \
+            --cov=app \
+            --cov-report=term-missing \
+            --cov-fail-under=60 \
+            -v
+
+  # ──────────────────────────────────────────────────────────────
+  # Frontend: Next.js / TypeScript
+  # ──────────────────────────────────────────────────────────────
+  frontend:
+    name: Frontend (Next.js)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: portfolio-frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: portfolio-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Create a stub .env.local so Next.js build doesn't fail on missing vars
+      - name: Create stub .env.local
+        run: |
+          cat > .env.local << 'EOF'
+          NEXT_PUBLIC_API_URL=https://placeholder.onrender.com
+          EOF
+
+      - name: Build (type-check + lint + compile)
+        run: npm run build
+        env:
+          # Needed so Next.js doesn't treat warnings as errors in CI
+          CI: false

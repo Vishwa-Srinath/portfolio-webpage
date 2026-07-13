@@ -51,14 +51,22 @@ def create_app() -> FastAPI:
     )
 
     # Trusted Host Middleware
-    # Include "testserver" for FastAPI TestClient compatibility
+    # Include "testserver" for FastAPI TestClient compatibility.
+    # "*.onrender.com" is required so Render's internal health checks
+    # (which arrive as <service-name>.onrender.com) are accepted.
     application.add_middleware(
         TrustedHostMiddleware,
         allowed_hosts=[
+            # Production domains (update yourdomain.com when you have a custom domain)
             "yourdomain.com",
+            "www.yourdomain.com",
             "api.yourdomain.com",
+            # Render free-tier hostname (required for health checks to pass)
+            "*.onrender.com",
+            # Local development
             "localhost",
             "127.0.0.1",
+            # FastAPI TestClient (required for pytest to work)
             "testserver",
         ],
     )

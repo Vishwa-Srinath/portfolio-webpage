@@ -1,0 +1,140 @@
+name: Keep-Alive & DB Backup
+
+# Runs every 3 days (midnight UTC on days 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31)
+# Purposes:
+#   1. Keep Supabase from pausing (pauses after 7 days of zero API activity)
+#   2. Keep Render from accumulating a long cold-start (not the same as gaming spin-down;
+#      this is a legitimate health check, not a sleep-avoider every 14 minutes)
+#   3. Take a pg_dump backup of the Supabase database and store it as a
+#      GitHub Actions artifact (retained for 30 days, then auto-deleted)
+#
+# Required GitHub Secrets (set at: repo > Settings > Secrets and variables > Actions):
+#
+#   RENDER_HEALTH_URL          → https://portfolio-api.onrender.com/api/v1/health
+#   SUPABASE_DB_HOST           → db.ifmkrkhpkanpjcorzkmm.supabase.co
+#   SUPABASE_DB_NAME           → postgres
+#   SUPABASE_DB_USER           → postgres
+#   SUPABASE_DB_PASSWORD       → mvQH+gw!wL9YT!L
+#
+# The workflow will still succeed even if Render is cold (30–60s startup is expected).
+
+on:
+  schedule:
+    # Every 3 days at midnight UTC
+    - cron: "0 0 */3 * *"
+
+  # Allow running manually from the Actions tab for testing
+  workflow_dispatch:
+
+jobs:
+  keepalive-and-backup:
+    name: Ping services + backup database
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ─────────────────────────────────────────────────────────
+      # Step 1: Ping Render health endpoint
+      # Uses --retry to handle the cold-start delay gracefully.
+      # ─────────────────────────────────────────────────────────
+      - name: Ping Render (keep-alive + health check)
+        run: |
+          echo "Pinging Render health endpoint..."
+          response=$(curl \
+            --silent \
+            --max-time 90 \
+            --retry 3 \
+            --retry-delay 20 \
+            --retry-all-errors \
+            --write-out "\nHTTP_STATUS:%{http_code}" \
+            "${{ secrets.RENDER_HEALTH_URL }}")
+          
+          http_status=$(echo "$response" | grep "HTTP_STATUS:" | cut -d: -f2)
+          body=$(echo "$response" | grep -v "HTTP_STATUS:")
+          
+          echo "Response: $body"
+          echo "HTTP Status: $http_status"
+          
+          if [ "$http_status" = "200" ]; then
+            echo "✅ Render is healthy"
+          else
+            echo "⚠️ Render returned HTTP $http_status — may still be warming up"
+            # Don't fail the workflow for a non-200; the purpose is to send the ping
+          fi
+
+      # ─────────────────────────────────────────────────────────
+      # Step 2: Install pg_dump (PostgreSQL client tools)
+      # ─────────────────────────────────────────────────────────
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y postgresql-client
+
+      # ─────────────────────────────────────────────────────────
+      # Step 3: Run pg_dump against Supabase
+      # This also counts as "API activity" and resets the 7-day pause timer.
+      # ─────────────────────────────────────────────────────────
+      - name: Backup Supabase database (pg_dump)
+        env:
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          mkdir -p backups
+          TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
+          BACKUP_FILE="backups/supabase_backup_${TIMESTAMP}.sql"
+          
+          echo "Starting pg_dump to $BACKUP_FILE ..."
+          
+          pg_dump \
+            --host="${{ secrets.SUPABASE_DB_HOST }}" \
+            --port=5432 \
+            --username="${{ secrets.SUPABASE_DB_USER }}" \
+            --dbname="${{ secrets.SUPABASE_DB_NAME }}" \
+            --no-password \
+            --format=plain \
+            --clean \
+            --if-exists \
+            --no-owner \
+            --no-acl \
+            --exclude-schema=extensions \
+            --exclude-schema=graphql \
+            --exclude-schema=graphql_public \
+            --exclude-schema=net \
+            --exclude-schema=realtime \
+            --exclude-schema=storage \
+            --exclude-schema=supabase_functions \
+            --exclude-schema=vault \
+            --schema=public \
+            > "$BACKUP_FILE"
+          
+          BACKUP_SIZE=$(du -sh "$BACKUP_FILE" | cut -f1)
+          echo "✅ Backup complete: $BACKUP_FILE ($BACKUP_SIZE)"
+          echo "backup_file=$BACKUP_FILE" >> $GITHUB_OUTPUT
+        id: backup
+
+      # ─────────────────────────────────────────────────────────
+      # Step 4: Upload the backup as a GitHub Actions artifact
+      # Retained for 30 days, then auto-deleted.
+      # ─────────────────────────────────────────────────────────
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-backup-${{ github.run_id }}
+          path: backups/
+          retention-days: 30
+          if-no-files-found: error
+
+      # ─────────────────────────────────────────────────────────
+      # Step 5: Summary
+      # ─────────────────────────────────────────────────────────
+      - name: Job summary
+        run: |
+          echo "## Keep-Alive & Backup Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Render health ping | ✅ Sent |" >> $GITHUB_STEP_SUMMARY
+          echo "| Supabase backup | ✅ Created (30-day retention) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Supabase pause timer | ✅ Reset |" >> $GITHUB_STEP_SUMMARY
