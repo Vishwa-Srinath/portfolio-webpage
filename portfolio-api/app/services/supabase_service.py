@@ -76,7 +76,11 @@ async def insert_contact_message(
 
 
 async def insert_event(
-    event_name: str, page: str, metadata: Optional[dict] = None
+    event_name: str,
+    page: str,
+    metadata: Optional[dict] = None,
+    session_id: Optional[str] = None,
+    referrer: Optional[str] = None,
 ) -> Optional[str]:
     """
     Insert an analytics event.
@@ -85,6 +89,8 @@ async def insert_event(
         event_name: Name of the event (e.g., "resume_download").
         page: Page URL or identifier where the event occurred.
         metadata: Optional event-specific data as a dict.
+        session_id: Optional client-generated UUID for session correlation.
+        referrer: Optional referrer URL.
 
     Returns:
         UUID of inserted event, or None if insertion failed.
@@ -98,6 +104,8 @@ async def insert_event(
                     "event_name": event_name,
                     "page": page,
                     "metadata": metadata or {},
+                    "session_id": session_id,
+                    "referrer": referrer,
                 }
             )
             .execute()
