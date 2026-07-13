@@ -24,6 +24,8 @@ async def log_event(request: EventRequest):
         event_name=request.event_name,
         page=request.page,
         metadata=request.metadata,
+        session_id=request.session_id,
+        referrer=request.referrer,
     )
 
     if not event_id:
