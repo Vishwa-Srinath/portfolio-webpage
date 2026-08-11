@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
-import logging
+import os
 
 from app.core.config import get_settings
 from app.core.logging import setup_logging
@@ -54,21 +54,30 @@ def create_app() -> FastAPI:
     # Include "testserver" for FastAPI TestClient compatibility.
     # "*.onrender.com" is required so Render's internal health checks
     # (which arrive as <service-name>.onrender.com) are accepted.
+    allowed_hosts = [
+        # Production domains (update yourdomain.com when you have a custom domain)
+        "yourdomain.com",
+        "www.yourdomain.com",
+        "api.yourdomain.com",
+        # Render free-tier hostname (kept for the existing deployment option)
+        "*.onrender.com",
+        # CloudFront is optional in front of the Function URL
+        "*.cloudfront.net",
+        # Local development and FastAPI TestClient
+        "localhost",
+        "127.0.0.1",
+        "testserver",
+    ]
+
+    # AWS injects AWS_REGION automatically. Starlette host wildcards are
+    # left-most only, so include the exact regional Function URL suffix.
+    aws_region = os.getenv("AWS_REGION")
+    if aws_region:
+        allowed_hosts.append(f"*.lambda-url.{aws_region}.on.aws")
+
     application.add_middleware(
         TrustedHostMiddleware,
-        allowed_hosts=[
-            # Production domains (update yourdomain.com when you have a custom domain)
-            "yourdomain.com",
-            "www.yourdomain.com",
-            "api.yourdomain.com",
-            # Render free-tier hostname (required for health checks to pass)
-            "*.onrender.com",
-            # Local development
-            "localhost",
-            "127.0.0.1",
-            # FastAPI TestClient (required for pytest to work)
-            "testserver",
-        ],
+        allowed_hosts=allowed_hosts,
     )
 
     # Exception handlers

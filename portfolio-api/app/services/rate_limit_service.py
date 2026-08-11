@@ -7,7 +7,6 @@ and can be extended with Redis-backed implementations for production.
 """
 
 import logging
-from typing import Optional
 
 from app.core.config import get_settings
 from app.core.security import DEFAULT_MAX_REQUESTS, DEFAULT_WINDOW_SECONDS

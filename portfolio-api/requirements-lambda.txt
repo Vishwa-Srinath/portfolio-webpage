@@ -1,0 +1,5 @@
+# Keep Lambda dependencies aligned with local/CI dependencies.
+-r requirements.txt
+
+# ASGI-to-AWS Lambda Function URL adapter.
+mangum==0.21.0

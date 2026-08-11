@@ -1,0 +1,93 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ManagePortfolioLambda",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:AddPermission",
+        "lambda:CreateFunction",
+        "lambda:CreateFunctionUrlConfig",
+        "lambda:GetFunction",
+        "lambda:GetFunctionConcurrency",
+        "lambda:GetFunctionConfiguration",
+        "lambda:GetFunctionUrlConfig",
+        "lambda:GetPolicy",
+        "lambda:ListVersionsByFunction",
+        "lambda:PublishVersion",
+        "lambda:PutFunctionConcurrency",
+        "lambda:TagResource",
+        "lambda:UpdateFunctionCode",
+        "lambda:UpdateFunctionConfiguration",
+        "lambda:UpdateFunctionUrlConfig"
+      ],
+      "Resource": [
+        "arn:aws:lambda:*:*:function:portfolio-api",
+        "arn:aws:lambda:*:*:function:portfolio-api:*",
+        "arn:aws:lambda:*:*:function:portfolio-api-zip",
+        "arn:aws:lambda:*:*:function:portfolio-api-zip:*"
+      ]
+    },
+    {
+      "Sid": "ReadLambdaAccountQuota",
+      "Effect": "Allow",
+      "Action": "lambda:GetAccountSettings",
+      "Resource": "*"
+    },
+    {
+      "Sid": "ManagePortfolioExecutionAndDeployRoles",
+      "Effect": "Allow",
+      "Action": [
+        "iam:AttachRolePolicy",
+        "iam:CreateRole",
+        "iam:GetRole",
+        "iam:PutRolePolicy",
+        "iam:TagRole",
+        "iam:UpdateAssumeRolePolicy"
+      ],
+      "Resource": [
+        "arn:aws:iam::*:role/portfolio-api-lambda-role",
+        "arn:aws:iam::*:role/github-actions-deploy-portfolio-api-zip"
+      ]
+    },
+    {
+      "Sid": "PassOnlyPortfolioExecutionRoleToLambda",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::*:role/portfolio-api-lambda-role",
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "lambda.amazonaws.com"
+        }
+      }
+    },
+    {
+      "Sid": "ManageGitHubOidcProvider",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateOpenIDConnectProvider",
+        "iam:GetOpenIDConnectProvider",
+        "iam:ListOpenIDConnectProviders"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ManagePortfolioLogGroup",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:PutRetentionPolicy"
+      ],
+      "Resource": "arn:aws:logs:*:*:log-group:/aws/lambda/portfolio-api*"
+    },
+    {
+      "Sid": "ManagePortfolioBudget",
+      "Effect": "Allow",
+      "Action": [
+        "budgets:ModifyBudget",
+        "budgets:ViewBudget"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

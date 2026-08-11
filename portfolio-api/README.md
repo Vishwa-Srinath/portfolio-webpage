@@ -68,3 +68,19 @@ pytest -v --cov=app
 docker build -t portfolio-api .
 docker run -p 8000:8000 --env-file .env.local portfolio-api
 ```
+
+## AWS Lambda ZIP Deployment
+
+The zero-fixed-cost AWS deployment uses Mangum, a ZIP archive, and a Lambda
+Function URL. It does not require Docker, ECR, or API Gateway.
+
+```bash
+cp .env.lambda.example .env.lambda
+# Fill in the production values, then:
+./scripts/build_lambda_zip.sh
+./scripts/deploy_lambda.sh
+```
+
+See [`../docs/AWS_LAMBDA_ZIP_DEPLOYMENT.md`](../docs/AWS_LAMBDA_ZIP_DEPLOYMENT.md)
+for first deployment, cost guardrails, GitHub OIDC/CD, troubleshooting,
+rollback, and cleanup instructions.

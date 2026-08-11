@@ -27,16 +27,17 @@ def setup_logging() -> logging.Logger:
     stdout_handler.setFormatter(json_formatter)
     logger.addHandler(stdout_handler)
 
-    # File handler (optional, for rotating logs)
-    # Create logs directory if it doesn't exist
-    os.makedirs("logs", exist_ok=True)
+    # Lambda's deployment directory is read-only. CloudWatch captures stdout,
+    # so only local/container runs need the rotating file handler.
+    if not os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+        os.makedirs("logs", exist_ok=True)
 
-    file_handler = logging.handlers.RotatingFileHandler(
-        "logs/app.log",
-        maxBytes=10_000_000,  # 10MB
-        backupCount=5,
-    )
-    file_handler.setFormatter(json_formatter)
-    logger.addHandler(file_handler)
+        file_handler = logging.handlers.RotatingFileHandler(
+            "logs/app.log",
+            maxBytes=10_000_000,  # 10MB
+            backupCount=5,
+        )
+        file_handler.setFormatter(json_formatter)
+        logger.addHandler(file_handler)
 
     return logger
