@@ -1,0 +1,100 @@
+name: Deploy Backend ZIP to AWS Lambda
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "portfolio-api/app/**"
+      - "portfolio-api/lambda_handler.py"
+      - "portfolio-api/requirements.txt"
+      - "portfolio-api/requirements-lambda.txt"
+      - "portfolio-api/scripts/build_lambda_zip.sh"
+      - ".github/workflows/deploy-backend.yml"
+  workflow_dispatch: {}
+
+# OIDC supplies short-lived AWS credentials; no AWS access keys are stored in GitHub.
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-portfolio-api-production
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
+  FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME || 'portfolio-api' }}
+
+jobs:
+  deploy:
+    name: Build ZIP and deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            portfolio-api/requirements.txt
+            portfolio-api/requirements-lambda.txt
+
+      - name: Build Lambda deployment ZIP
+        run: portfolio-api/scripts/build_lambda_zip.sh
+
+      - name: Configure AWS credentials through OIDC
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy immutable Lambda version
+        id: deploy
+        run: |
+          VERSION=$(aws lambda update-function-code \
+            --function-name "$FUNCTION_NAME" \
+            --zip-file fileb://portfolio-api/dist/portfolio-api-lambda.zip \
+            --publish \
+            --region "$AWS_REGION" \
+            --query 'Version' \
+            --output text)
+          aws lambda wait function-updated-v2 \
+            --function-name "$FUNCTION_NAME" \
+            --region "$AWS_REGION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Smoke test Function URL
+        id: smoke
+        run: |
+          FUNCTION_URL=$(aws lambda get-function-url-config \
+            --function-name "$FUNCTION_NAME" \
+            --region "$AWS_REGION" \
+            --query 'FunctionUrl' \
+            --output text)
+          HEALTH_RESPONSE=$(curl --fail --silent --show-error \
+            --retry 8 \
+            --retry-delay 3 \
+            --retry-all-errors \
+            --max-time 30 \
+            "${FUNCTION_URL}api/v1/health")
+          python -c 'import json, sys; payload=json.loads(sys.argv[1]); assert payload.get("status") == "healthy" and payload.get("database") == "ok", payload' "$HEALTH_RESPONSE"
+          echo "$HEALTH_RESPONSE"
+          echo "url=$FUNCTION_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Deployment summary
+        run: |
+          {
+            echo "## Backend deployment"
+            echo
+            echo "| Item | Value |"
+            echo "|---|---|"
+            echo "| Lambda | \`$FUNCTION_NAME\`"
+            echo "| Region | \`$AWS_REGION\`"
+            echo "| Version | \`${{ steps.deploy.outputs.version }}\`"
+            echo "| URL | ${{ steps.smoke.outputs.url }}"
+          } >> "$GITHUB_STEP_SUMMARY"

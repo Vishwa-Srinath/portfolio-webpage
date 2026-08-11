@@ -3,20 +3,23 @@ name: Keep-Alive & DB Backup
 # Runs every 3 days (midnight UTC on days 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31)
 # Purposes:
 #   1. Keep Supabase from pausing (pauses after 7 days of zero API activity)
-#   2. Keep Render from accumulating a long cold-start (not the same as gaming spin-down;
-#      this is a legitimate health check, not a sleep-avoider every 14 minutes)
-#   3. Take a pg_dump backup of the Supabase database and store it as a
+#   2. Take a pg_dump backup of the Supabase database and store it as a
 #      GitHub Actions artifact (retained for 30 days, then auto-deleted)
+#
+# NOTE (v2.0): Render has been replaced by AWS Lambda. Lambda has no sleep
+# state to fight — we no longer need to ping it to keep it "warm." This workflow
+# now only pings the health endpoint to confirm Supabase is up and reset its
+# 7-day pause timer. The Lambda ping is a bonus health check, not a keep-alive.
 #
 # Required GitHub Secrets (set at: repo > Settings > Secrets and variables > Actions):
 #
-#   RENDER_HEALTH_URL          → https://portfolio-api.onrender.com/api/v1/health
-#   SUPABASE_DB_HOST           → db.ifmkrkhpkanpjcorzkmm.supabase.co
-#   SUPABASE_DB_NAME           → postgres
-#   SUPABASE_DB_USER           → postgres
-#   SUPABASE_DB_PASSWORD       → mvQH+gw!wL9YT!L
+#   SUPABASE_DB_HOST     → db.<project-ref>.supabase.co
+#   SUPABASE_DB_NAME     → postgres
+#   SUPABASE_DB_USER     → postgres
+#   SUPABASE_DB_PASSWORD → (from Supabase dashboard > Settings > Database > Connection info)
 #
-# The workflow will still succeed even if Render is cold (30–60s startup is expected).
+# The health URL below is NOT a secret — it is a public endpoint.
+# Replace "yourdomain.com" with your actual custom domain once DNS is wired.
 
 on:
   schedule:
@@ -28,7 +31,7 @@ on:
 
 jobs:
   keepalive-and-backup:
-    name: Ping services + backup database
+    name: Ping API health + backup database
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -37,32 +40,34 @@ jobs:
         uses: actions/checkout@v4
 
       # ─────────────────────────────────────────────────────────
-      # Step 1: Ping Render health endpoint
-      # Uses --retry to handle the cold-start delay gracefully.
+      # Step 1: Ping Lambda/API health endpoint
+      # This resets Supabase's 7-day inactivity timer by triggering
+      # a real DB query inside the health check handler.
+      # Lambda itself has no sleep state — this is purely for Supabase.
       # ─────────────────────────────────────────────────────────
-      - name: Ping Render (keep-alive + health check)
+      - name: Ping API health endpoint (resets Supabase 7-day timer)
         run: |
-          echo "Pinging Render health endpoint..."
+          echo "Pinging API health endpoint..."
           response=$(curl \
             --silent \
-            --max-time 90 \
+            --max-time 30 \
             --retry 3 \
-            --retry-delay 20 \
+            --retry-delay 5 \
             --retry-all-errors \
             --write-out "\nHTTP_STATUS:%{http_code}" \
-            "${{ secrets.RENDER_HEALTH_URL }}")
-          
+            "https://api.yourdomain.com/api/v1/health")
+
           http_status=$(echo "$response" | grep "HTTP_STATUS:" | cut -d: -f2)
           body=$(echo "$response" | grep -v "HTTP_STATUS:")
-          
+
           echo "Response: $body"
           echo "HTTP Status: $http_status"
-          
+
           if [ "$http_status" = "200" ]; then
-            echo "✅ Render is healthy"
+            echo "✅ API is healthy — Supabase pause timer reset"
           else
-            echo "⚠️ Render returned HTTP $http_status — may still be warming up"
-            # Don't fail the workflow for a non-200; the purpose is to send the ping
+            echo "⚠️  API returned HTTP $http_status — check CloudWatch Logs"
+            # Don't fail the workflow; backup is more important than a health blip
           fi
 
       # ─────────────────────────────────────────────────────────
@@ -75,7 +80,8 @@ jobs:
 
       # ─────────────────────────────────────────────────────────
       # Step 3: Run pg_dump against Supabase
-      # This also counts as "API activity" and resets the 7-day pause timer.
+      # The direct DB connection also counts as activity and resets
+      # the 7-day pause timer independently of the HTTP ping above.
       # ─────────────────────────────────────────────────────────
       - name: Backup Supabase database (pg_dump)
         env:
@@ -84,9 +90,9 @@ jobs:
           mkdir -p backups
           TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
           BACKUP_FILE="backups/supabase_backup_${TIMESTAMP}.sql"
-          
+
           echo "Starting pg_dump to $BACKUP_FILE ..."
-          
+
           pg_dump \
             --host="${{ secrets.SUPABASE_DB_HOST }}" \
             --port=5432 \
@@ -108,7 +114,7 @@ jobs:
             --exclude-schema=vault \
             --schema=public \
             > "$BACKUP_FILE"
-          
+
           BACKUP_SIZE=$(du -sh "$BACKUP_FILE" | cut -f1)
           echo "✅ Backup complete: $BACKUP_FILE ($BACKUP_SIZE)"
           echo "backup_file=$BACKUP_FILE" >> $GITHUB_OUTPUT
@@ -135,6 +141,6 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|---|---|" >> $GITHUB_STEP_SUMMARY
-          echo "| Render health ping | ✅ Sent |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lambda health ping | ✅ Sent |" >> $GITHUB_STEP_SUMMARY
           echo "| Supabase backup | ✅ Created (30-day retention) |" >> $GITHUB_STEP_SUMMARY
           echo "| Supabase pause timer | ✅ Reset |" >> $GITHUB_STEP_SUMMARY

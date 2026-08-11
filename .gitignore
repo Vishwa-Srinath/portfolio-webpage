@@ -8,6 +8,7 @@
 .env.*.local
 .env.production
 .env.development
+.env.lambda
 # Allow the example template
 !.env.example
 
@@ -25,6 +26,7 @@ ENV/
 *.egg-info/
 dist/
 build/
+.lambda-build/
 .mypy_cache/
 .pytest_cache/
 .ruff_cache/
