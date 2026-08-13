@@ -10,13 +10,12 @@ const config: NextConfig = {
       },
     ],
   },
-  redirects: async () => [
-    {
-      source: "/resume",
-      destination: "/resume.pdf",
+  redirects: async () =>
+    ["/resume", "/resume.pdf"].map((source) => ({
+      source,
+      destination: "/documents/Vishwa_Srinath_CV.pdf",
       permanent: false,
-    },
-  ],
+    })),
 };
 
 export default config;

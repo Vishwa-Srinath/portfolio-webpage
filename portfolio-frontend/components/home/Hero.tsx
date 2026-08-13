@@ -25,7 +25,7 @@ const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 const socialLinks = [
   { href: "https://github.com/Vishwa-Srinath", label: "GitHub", icon: GithubIcon },
-  { href: "https://linkedin.com/in/vishwa-srinath", label: "LinkedIn", icon: LinkedinIcon },
+  { href: "https://www.linkedin.com/in/vishwa-srinath-a75128330", label: "LinkedIn", icon: LinkedinIcon },
   { href: "https://youtube.com/@vishwasrinath", label: "YouTube DSA Series", icon: YoutubeIcon },
 ];
 
@@ -35,11 +35,11 @@ export function Hero() {
       {/* Profile photo */}
       <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-full ring-4 ring-[var(--border)] ring-offset-4 ring-offset-[var(--bg)] md:h-52 md:w-52">
         <Image
-          src="/images/profile/headshot.png"
+          src="/images/profile/Mypic.jpeg"
           alt="Vishwa Srinath, CS&E undergraduate"
           fill
           sizes="(max-width: 768px) 160px, 208px"
-          className="object-cover"
+          className="object-cover object-[center_38%]"
           priority
         />
       </div>
@@ -72,11 +72,11 @@ export function Hero() {
             Get in Touch
           </Link>
           <a
-            href="/resume.pdf"
-            download
+            href="/documents/Vishwa_Srinath_CV.pdf"
+            download="Vishwa_Srinath_CV.pdf"
             className="inline-flex h-11 items-center rounded-full px-6 text-sm font-medium text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
           >
-            Resume ↓
+            Download CV ↓
           </a>
         </div>
 

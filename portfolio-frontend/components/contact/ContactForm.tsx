@@ -27,7 +27,7 @@ const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 const socialLinks = [
   { href: "https://github.com/Vishwa-Srinath", label: "GitHub", icon: GithubIcon },
-  { href: "https://linkedin.com/in/vishwa-srinath", label: "LinkedIn", icon: LinkedinIcon },
+  { href: "https://www.linkedin.com/in/vishwa-srinath-a75128330", label: "LinkedIn", icon: LinkedinIcon },
   { href: "https://youtube.com/@vishwasrinath", label: "YouTube", icon: YoutubeIcon },
 ];
 

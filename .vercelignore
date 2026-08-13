@@ -1,0 +1,8 @@
+# The Vercel project builds only the Next.js app from portfolio-frontend/.
+# Keep backend code, source documents, and local agent metadata out of CLI uploads.
+/.agents/
+/.codex/
+/.github/
+/content/
+/docs/
+/portfolio-api/

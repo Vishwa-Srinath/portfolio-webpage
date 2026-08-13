@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import matter from "gray-matter";
+import { load as parseYaml } from "js-yaml";
 
 export interface ContentFrontmatter {
   title: string;
@@ -22,6 +22,28 @@ export interface ContentItem {
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
+function parseContentFile(raw: string): {
+  data: Record<string, unknown>;
+  content: string;
+} {
+  const normalized = raw.replace(/\r\n/g, "\n");
+  const match = /^---\n([\s\S]*?)\n---(?:\n|$)([\s\S]*)$/u.exec(normalized);
+
+  if (!match) {
+    throw new Error("Content file is missing valid YAML frontmatter");
+  }
+
+  const data = parseYaml(match[1]);
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Content frontmatter must be a YAML object");
+  }
+
+  return {
+    data: data as Record<string, unknown>,
+    content: match[2],
+  };
+}
+
 export async function getAllContentByType(
   type: "projects" | "learn" | "stories" | "notes"
 ): Promise<ContentItem[]> {
@@ -35,7 +57,7 @@ export async function getAllContentByType(
         .filter((f) => f.endsWith(".mdx"))
         .map(async (file) => {
           const raw = await fs.readFile(path.join(dir, file), "utf-8");
-          const { data, content: body } = matter(raw);
+          const { data, content: body } = parseContentFile(raw);
           const slug = file.replace(".mdx", "");
           return {
             slug,
@@ -59,7 +81,7 @@ export async function getContentBySlug(
   try {
     const file = path.join(CONTENT_DIR, type, `${slug}.mdx`);
     const raw = await fs.readFile(file, "utf-8");
-    const { data, content: body } = matter(raw);
+    const { data, content: body } = parseContentFile(raw);
     return {
       slug,
       frontmatter: { ...data, slug } as ContentFrontmatter,
