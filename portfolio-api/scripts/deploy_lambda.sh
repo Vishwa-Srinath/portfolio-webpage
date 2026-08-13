@@ -116,7 +116,6 @@ if [[ "$PACKAGE_TYPE" == "Zip" ]]; then
     --function-name "$FUNCTION_NAME" \
     --runtime python3.12 \
     --handler lambda_handler.handler \
-    --architectures x86_64 \
     --memory-size "$MEMORY_SIZE" \
     --timeout "$FUNCTION_TIMEOUT" \
     --environment "file://$ENV_JSON" \
