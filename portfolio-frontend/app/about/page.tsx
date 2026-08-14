@@ -26,7 +26,7 @@ export default function AboutPage() {
       {/* Full bio */}
       <section className="mt-8">
         <p className="text-base leading-relaxed text-[var(--fg-muted)]">
-          I&apos;m a Computer Science &amp; Engineering undergraduate (23 Batch) at the University of
+          I&apos;m a Computer Science &amp; Engineering undergraduate (24 Batch) at the University of
           Moratuwa — one of the oldest and most research-intensive engineering universities in Sri Lanka.
           My work sits at the intersection of agentic AI systems, algorithm design, and digital
           hardware, though I&apos;m broadly interested in any problem where formal mathematics meets
