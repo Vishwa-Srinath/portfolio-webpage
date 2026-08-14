@@ -97,7 +97,7 @@ ROLE / IDENTITY LINE (pick one, or write your own in this shape):
 systems, writing DSA content, and occasionally soldering an FPGA."
 
 SHORT BIO (2-3 sentences, sits directly under the hero):
-"I'm a Computer Science & Engineering undergraduate (23 Batch,
+"I'm a Computer Science & Engineering undergraduate (24 Batch,
 University of Moratuwa) with a strong pull toward mathematics, machine
 learning, and the history of computing. Recent work spans agentic AI
 systems (FastAPI + Supabase + pgvector), FPGA-based digital design in
@@ -244,7 +244,7 @@ export function BioStrip() {
   return (
     <section className="border-y border-border bg-background-elevated px-4 py-10">
       <p className="mx-auto max-w-2xl text-center text-base leading-relaxed text-foreground-muted">
-        I&apos;m a Computer Science &amp; Engineering undergraduate (23 Batch,
+        I&apos;m a Computer Science &amp; Engineering undergraduate (24 Batch,
         University of Moratuwa) with a strong pull toward mathematics, machine
         learning, and the history of computing. Recent work spans agentic AI
         systems (FastAPI + Supabase + pgvector), FPGA-based digital design in

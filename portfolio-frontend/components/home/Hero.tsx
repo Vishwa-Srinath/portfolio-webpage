@@ -47,7 +47,7 @@ export function Hero() {
       {/* Text content */}
       <div className="text-center md:text-left">
         <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-[var(--accent-cyan)]">
-          University of Moratuwa · 23 Batch
+          University of Moratuwa · 24 Batch
         </p>
         <h1 className="text-4xl font-bold tracking-tight text-[var(--fg)] md:text-5xl lg:text-6xl">
           Vishwa Srinath

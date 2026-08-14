@@ -15,7 +15,7 @@ const skills = {
 const timeline = [
   { year: "2026", items: ["AgenTrix 2026 — multi-agent insurance AI", "LAUNCH26 Hackathon (Relic Ring Protocol)", "Migrated dev environment to Fedora Linux", "Started Behind the Bit (computing history series)"] },
   { year: "2025", items: ["CS2022/CS2023 — Data Structures & Algorithms", "Nanoprocessor VHDL project on Basys 3", "CS3043 Interactive DSA Study Companion"] },
-  { year: "2024", items: ["Enrolled — University of Moratuwa (23 Batch)", "First circuit and digital design modules"] },
+  { year: "2024", items: ["Enrolled — University of Moratuwa (24 Batch)", "First circuit and digital design modules"] },
 ];
 
 export default function AboutPage() {
@@ -58,7 +58,7 @@ export default function AboutPage() {
             University of Moratuwa
           </p>
           <p className="mt-0.5 text-sm text-[var(--fg-muted)]">
-            B.Sc. Eng. in Computer Science &amp; Engineering · 23 Batch
+            B.Sc. Eng. in Computer Science &amp; Engineering · 24 Batch
           </p>
           <div className="mt-4 border-t border-[var(--border)] pt-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-[var(--fg-muted)]">

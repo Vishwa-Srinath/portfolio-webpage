@@ -5,7 +5,7 @@ export function BioStrip() {
     <section className="border-y border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-12">
       <div className="mx-auto max-w-3xl text-center">
         <p className="text-base leading-relaxed text-[var(--fg-muted)] md:text-lg">
-          I&apos;m a Computer Science &amp; Engineering undergraduate (23 Batch, University of Moratuwa)
+          I&apos;m a Computer Science &amp; Engineering undergraduate (24 Batch, University of Moratuwa)
           with a strong pull toward mathematics, machine learning, and the history of computing.
           Recent work spans agentic AI systems (FastAPI + Supabase + pgvector), FPGA-based digital
           design in VHDL, and a growing library of algorithm explainers. Outside of code, I&apos;m
