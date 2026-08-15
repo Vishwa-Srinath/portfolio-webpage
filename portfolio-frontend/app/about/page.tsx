@@ -26,27 +26,14 @@ export default function AboutPage() {
       {/* Full bio */}
       <section className="mt-8">
         <p className="text-base leading-relaxed text-[var(--fg-muted)]">
-          I&apos;m a Computer Science &amp; Engineering undergraduate (24 Batch) at the University of
-          Moratuwa — one of the oldest and most research-intensive engineering universities in Sri Lanka.
-          My work sits at the intersection of agentic AI systems, algorithm design, and digital
-          hardware, though I&apos;m broadly interested in any problem where formal mathematics meets
-          implementation reality.
+          I am a Computer Science and Engineering undergraduate in the Faculty of Engineering at the
+          University of Moratuwa. I am passionate about solving real-world problems through an
+          engineering mindset and applying the knowledge I gain through my studies.
         </p>
         <p className="mt-4 text-base leading-relaxed text-[var(--fg-muted)]">
-          Recent projects include a multi-agent FastAPI + Supabase + pgvector system for insurance claim
-          triage (AgenTrix 2026), a fully synthesised 4-bit nanoprocessor in VHDL on a Basys 3 FPGA,
-          and a real-time multiplayer puzzle-hunt backend built in 24 hours for the LAUNCH26 hackathon.
-          Outside of engineering work, I run{" "}
-          <a
-            href="https://facebook.com/behindthebit"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[var(--accent-amber)] hover:underline"
-          >
-            Behind the Bit
-          </a>
-          , a series on the human stories behind the machines we take for granted, and I&apos;m
-          slowly working through a DSA explainer series on YouTube.
+          My key areas of interest include database systems, data science, machine learning, artificial
+          intelligence, and mathematics. I am always eager to learn, take on new projects and
+          challenges, and embrace responsibility.
         </p>
       </section>
 
