@@ -63,9 +63,9 @@ export default async function ProjectPage({ params }: Props) {
               href={project.frontmatter.repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm font-medium text-[var(--accent-cyan)] hover:underline"
+              className="flex items-center gap-1.5 rounded-full border border-[var(--accent-cyan)]/50 bg-[var(--accent-cyan)]/10 px-4 py-2 text-sm font-semibold text-[var(--accent-cyan)] transition-colors hover:bg-[var(--accent-cyan)] hover:text-white"
             >
-              View Code <ExternalLink className="h-3 w-3" />
+              View on GitHub <ExternalLink className="h-3.5 w-3.5" />
             </a>
           )}
           {project.frontmatter.liveUrl && (

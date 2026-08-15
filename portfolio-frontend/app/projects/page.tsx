@@ -4,7 +4,7 @@ import { ProjectCard } from "@/components/projects/ProjectCard";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Full-stack systems, agentic AI, FPGA experiments, and hackathon builds.",
+  description: "Software systems, data-focused projects, community platforms, and FPGA experiments.",
   openGraph: {
     title: "Projects — Vishwa Srinath",
     images: [{ url: "/og/projects.png", width: 1200, height: 630 }],
@@ -20,7 +20,7 @@ export default async function ProjectsPage() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold text-[var(--fg)] md:text-5xl">Projects</h1>
         <p className="mt-3 max-w-xl text-lg text-[var(--fg-muted)]">
-          Full-stack builds, agentic AI systems, competitive code, and FPGA experiments.
+          Software systems, data-focused projects, community platforms, and FPGA experiments.
         </p>
       </div>
 

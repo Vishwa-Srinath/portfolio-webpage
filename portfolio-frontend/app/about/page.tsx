@@ -13,9 +13,9 @@ const skills = {
 };
 
 const timeline = [
-  { year: "2026", items: ["AgenTrix 2026 — multi-agent insurance AI", "LAUNCH26 Hackathon (Relic Ring Protocol)", "Migrated dev environment to Fedora Linux", "Started Behind the Bit (computing history series)"] },
-  { year: "2025", items: ["CS2022/CS2023 — Data Structures & Algorithms", "Nanoprocessor VHDL project on Basys 3", "CS3043 Interactive DSA Study Companion"] },
-  { year: "2024", items: ["Enrolled — University of Moratuwa (24 Batch)", "First circuit and digital design modules"] },
+  { year: "Present", items: ["Second-year undergraduate in Computer Science and Engineering"] },
+  { year: "2025", items: ["September — selected Computer Science and Engineering as my field of specialisation"] },
+  { year: "2024", items: ["January — completed the G.C.E. Advanced Level examination", "December — entered the Faculty of Engineering at the University of Moratuwa"] },
 ];
 
 export default function AboutPage() {
@@ -40,20 +40,29 @@ export default function AboutPage() {
       {/* Education */}
       <section className="mt-12">
         <h2 className="mb-4 text-xl font-bold text-[var(--fg)]">Education</h2>
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-6">
-          <p className="font-semibold text-[var(--fg)]">
-            University of Moratuwa
-          </p>
-          <p className="mt-0.5 text-sm text-[var(--fg-muted)]">
-            B.Sc. Eng. in Computer Science &amp; Engineering · 24 Batch
-          </p>
-          <div className="mt-4 border-t border-[var(--border)] pt-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--fg-muted)]">
-              Relevant Coursework
+        <div className="space-y-4">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-6">
+            <p className="font-semibold text-[var(--fg)]">University of Moratuwa</p>
+            <p className="mt-0.5 text-sm text-[var(--fg-muted)]">
+              B.Sc. Eng. in Computer Science &amp; Engineering · 24 Batch · Second Year
             </p>
-            <p className="mt-1.5 text-sm text-[var(--fg-muted)]">
-              Data Structures &amp; Algorithms · Digital Design (VHDL/FPGA) · Software Engineering ·
-              Databases · Circuits &amp; Systems · Mathematics (Calculus, Discrete, Linear Algebra)
+            <p className="mt-4 border-t border-[var(--border)] pt-4 text-sm leading-relaxed text-[var(--fg-muted)]">
+              After a competitive first semester in the Faculty of Engineering, I earned a place in
+              the Computer Science and Engineering programme—the field I had always hoped to pursue.
+              Its emphasis on mathematics and problem-solving closely matches my interests, and I
+              continue to learn, grow, and strengthen my skills.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-6">
+            <p className="font-semibold text-[var(--fg)]">Maliyadeva College, Kurunegala</p>
+            <p className="mt-0.5 text-sm text-[var(--fg-muted)]">
+              G.C.E. Advanced Level · Physical Science Stream · Completed January 2024
+            </p>
+            <p className="mt-4 border-t border-[var(--border)] pt-4 text-sm leading-relaxed text-[var(--fg-muted)]">
+              Driven by a strong passion for mathematics and physics, I chose the Physical Science
+              stream and earned A passes in Combined Mathematics, Physics, Chemistry, and English. I
+              achieved a national rank of 602 and a Kurunegala District rank of 29.
             </p>
           </div>
         </div>
@@ -89,7 +98,7 @@ export default function AboutPage() {
         <div className="space-y-8">
           {timeline.map((entry) => (
             <div key={entry.year} className="flex gap-6">
-              <span className="w-12 shrink-0 pt-0.5 text-sm font-bold text-[var(--accent-cyan)]">
+              <span className="w-16 shrink-0 pt-0.5 text-sm font-bold text-[var(--accent-cyan)]">
                 {entry.year}
               </span>
               <ul className="space-y-2">

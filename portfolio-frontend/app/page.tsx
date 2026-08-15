@@ -8,10 +8,11 @@ import { getAllContentByType, sortByDate, filterFeatured } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Vishwa Srinath — CS&E Undergraduate",
   description:
-    "CS&E undergraduate at University of Moratuwa building agentic AI systems, DSA content, and FPGA projects.",
+    "CS&E undergraduate at the University of Moratuwa exploring database systems, data science, AI, mathematics, and FPGA design.",
   openGraph: {
     title: "Vishwa Srinath — CS&E Undergraduate",
-    description: "CS&E undergraduate at University of Moratuwa building agentic AI systems, DSA content, and FPGA projects.",
+    description:
+      "CS&E undergraduate at the University of Moratuwa exploring database systems, data science, AI, mathematics, and FPGA design.",
     images: [{ url: "/og/home.png", width: 1200, height: 630 }],
   },
 };

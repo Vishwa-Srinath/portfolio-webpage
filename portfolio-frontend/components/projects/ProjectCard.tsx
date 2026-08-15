@@ -7,13 +7,15 @@ interface Props {
 
 export function ProjectCard({ project }: Props) {
   return (
-    <Link
-      href={`/projects/${project.slug}`}
-      className="group flex flex-col rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-6 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent-cyan)]/40 hover:shadow-lg hover:shadow-[var(--accent-cyan)]/5"
-    >
+    <article className="group flex flex-col rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-6 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent-cyan)]/40 hover:shadow-lg hover:shadow-[var(--accent-cyan)]/5">
       <div className="flex-1">
-        <h2 className="text-base font-semibold text-[var(--fg)] transition-colors group-hover:text-[var(--accent-cyan)]">
-          {project.frontmatter.title}
+        <h2 className="text-base font-semibold">
+          <Link
+            href={`/projects/${project.slug}`}
+            className="text-[var(--fg)] transition-colors group-hover:text-[var(--accent-cyan)]"
+          >
+            {project.frontmatter.title}
+          </Link>
         </h2>
         <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--fg-muted)]">
           {project.frontmatter.summary}
@@ -33,17 +35,32 @@ export function ProjectCard({ project }: Props) {
         </div>
       )}
 
-      <div className="mt-4 flex items-center justify-between">
+      <div className="mt-4 flex items-center justify-between gap-3">
         <time className="text-xs text-[var(--fg-muted)]">
           {new Date(project.frontmatter.date).toLocaleDateString("en-US", {
             year: "numeric",
             month: "short",
           })}
         </time>
-        <p className="text-xs font-medium text-[var(--accent-cyan)] opacity-0 transition-opacity group-hover:opacity-100">
-          Read →
-        </p>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/projects/${project.slug}`}
+            className="text-xs font-medium text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+          >
+            Details →
+          </Link>
+          {project.frontmatter.repoUrl && (
+            <a
+              href={project.frontmatter.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-[var(--accent-cyan)]/50 bg-[var(--accent-cyan)]/10 px-3 py-1.5 text-xs font-semibold text-[var(--accent-cyan)] transition-colors hover:bg-[var(--accent-cyan)] hover:text-white"
+            >
+              GitHub ↗
+            </a>
+          )}
+        </div>
       </div>
-    </Link>
+    </article>
   );
 }
