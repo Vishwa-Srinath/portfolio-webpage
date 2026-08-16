@@ -12,6 +12,16 @@ export interface ContentFrontmatter {
   liveUrl?: string;
   repoUrl?: string;
   featured?: boolean;
+  gallery?: ProjectImage[];
+}
+
+export interface ProjectImage {
+  src: string;
+  alt: string;
+  caption: string;
+  width: number;
+  height: number;
+  layout?: "half" | "portrait" | "wide";
 }
 
 export interface ContentItem {

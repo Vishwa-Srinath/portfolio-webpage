@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getAllContentByType, getContentBySlug } from "@/lib/content";
 import { MDXContent } from "@/components/mdx/MDXContent";
+import { ProjectGallery } from "@/components/projects/ProjectGallery";
 import { ExternalLink } from "lucide-react";
 
 interface Props {
@@ -93,6 +94,10 @@ export default async function ProjectPage({ params }: Props) {
           </div>
         )}
       </header>
+
+      {project.frontmatter.gallery && project.frontmatter.gallery.length > 0 && (
+        <ProjectGallery images={project.frontmatter.gallery} />
+      )}
 
       <div className="mb-10 border-t border-[var(--border)]" />
       <MDXContent source={project.content} />
