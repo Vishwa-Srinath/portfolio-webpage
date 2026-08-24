@@ -1,0 +1,44 @@
+---
+title: "Project name"
+slug: "project-url-slug"
+summary: "A short description used on project cards and in search results."
+date: "YYYY-MM-DD"
+status: "shipped"
+featured: false
+role: "Your role"
+timeframe: "Project duration"
+coverImage: "/images/projects/project-url-slug/cover.jpg"
+tags: ["Topic", "Method"]
+techStack:
+  - name: "Technology"
+    category: "backend"
+    note: "Optional explanation of why it was used."
+problem: "The problem this project addresses."
+approach: "How the solution was designed and implemented."
+challenges:
+  - title: "A technical challenge"
+    detail: "How the challenge was handled."
+results:
+  - "A verified result or completed deliverable."
+repoUrl: "https://github.com/username/repository"
+liveUrl: ""
+demoVideoUrl: ""
+architectureDiagram: "/images/projects/project-url-slug/architecture.jpg"
+documentation:
+  - title: "Document title"
+    url: "https://drive.google.com/file/d/FILE_ID/view"
+    provider: "Google Drive"
+    description: "Optional short explanation of what the document contains."
+gallery:
+  - src: "/images/projects/project-url-slug/screenshot.jpg"
+    alt: "Meaningful description of the screenshot"
+    caption: "What this screenshot demonstrates."
+    width: 1200
+    height: 800
+    layout: "wide"
+    kind: "screenshot"
+---
+
+## Detailed project notes
+
+Add any longer technical explanations, decisions, tables, code examples, or lessons learned here.

@@ -23,6 +23,13 @@ export interface ProjectChallenge {
   detail: string;
 }
 
+export interface ProjectDocument {
+  title: string;
+  url: string;
+  description?: string;
+  provider?: string;
+}
+
 export interface ContentFrontmatter {
   title: string;
   slug: string;
@@ -45,6 +52,7 @@ export interface ContentFrontmatter {
   challenges?: ProjectChallenge[];
   results?: string[];
   architectureDiagram?: string;
+  documentation?: ProjectDocument[];
 }
 
 export interface ProjectImage {

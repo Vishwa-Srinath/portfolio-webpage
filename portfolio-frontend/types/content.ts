@@ -14,6 +14,12 @@ export interface Project {
   timeframe?: string;
   problem?: string;
   approach?: string;
+  documentation?: Array<{
+    title: string;
+    url: string;
+    description?: string;
+    provider?: string;
+  }>;
 }
 
 export interface Article {

@@ -17,6 +17,7 @@ import { MDXContent } from "@/components/mdx/MDXContent";
 import { ArchitectureDiagram } from "@/components/projects/ArchitectureDiagram";
 import { ChallengeAccordion } from "@/components/projects/ChallengeAccordion";
 import { ProjectGallery } from "@/components/projects/ProjectGallery";
+import { ProjectDocumentation } from "@/components/projects/ProjectDocumentation";
 import { ResultsList } from "@/components/projects/ResultsList";
 import { TechStackChip } from "@/components/projects/TechStackChip";
 import {
@@ -292,6 +293,10 @@ export default async function ProjectPage({ params }: Props) {
 
         {frontmatter.results && frontmatter.results.length > 0 && (
           <ResultsList results={frontmatter.results} />
+        )}
+
+        {frontmatter.documentation && frontmatter.documentation.length > 0 && (
+          <ProjectDocumentation documents={frontmatter.documentation} />
         )}
 
         {hasDeepDive && (

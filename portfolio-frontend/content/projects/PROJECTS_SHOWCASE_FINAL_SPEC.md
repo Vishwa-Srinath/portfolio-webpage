@@ -51,6 +51,13 @@ export interface ProjectChallenge {
   detail: string;
 }
 
+export interface ProjectDocument {
+  title: string;
+  url: string;
+  description?: string;
+  provider?: string;
+}
+
 export interface ProjectImage {
   src: string;
   alt: string;
@@ -86,6 +93,7 @@ export interface ProjectFrontmatter {
   challenges: ProjectChallenge[];
   results: string[];
   architectureDiagram?: string;
+  documentation?: ProjectDocument[];
 }
 ```
 
@@ -124,6 +132,10 @@ results:
   - "Placed top-8 at AgenTrix 2026 (40+ teams)"
   - "Reused as the base stack for this portfolio's backend"
 architectureDiagram: "/projects/agentrix/architecture.svg"
+documentation:
+  - title: "System design report"
+    url: "https://drive.google.com/file/d/FILE_ID/view"
+    provider: "Google Drive"
 ---
 
 <!-- optional deeper MDX write-up body goes here, rendered below the Results section -->
@@ -180,8 +192,9 @@ Featured variant is the same component with `variant="featured"` (§4.1) — lar
 8. **Product & Architecture** gallery — existing `ProjectGallery`, now lightbox-enabled
 9. **Challenges** — `ChallengeAccordion`, collapsed by default (only rendered if `challenges.length > 0`)
 10. **Results** — checklist-style list, one line each, using a checkmark icon from `lucide-react`
-11. Optional full MDX write-up body (rendered below Results, using existing MDX/typography styles — no new prose styling needed)
-12. Prev/Next project navigation + related-tag chips (existing pattern, unchanged)
+11. **Project documentation** — linked supporting documents (only rendered if `documentation` is set)
+12. Optional full MDX write-up body (rendered below Results, using existing MDX/typography styles — no new prose styling needed)
+13. Prev/Next project navigation + related-tag chips (existing pattern, unchanged)
 
 **Conditional rendering rule:** every section beyond #1–#6 is optional and MUST be omitted (not shown empty/placeholder) if its underlying frontmatter field is absent. A project with no diagram simply has no Architecture section — never render an empty state for optional sections on a public page.
 
