@@ -2,6 +2,27 @@ import fs from "fs/promises";
 import path from "path";
 import { load as parseYaml } from "js-yaml";
 
+export type ProjectStatus = "shipped" | "in-progress" | "archived";
+
+export type TechCategory =
+  | "ai"
+  | "backend"
+  | "database"
+  | "frontend"
+  | "infra"
+  | "hardware";
+
+export interface TechStackItem {
+  name: string;
+  category: TechCategory;
+  note?: string;
+}
+
+export interface ProjectChallenge {
+  title: string;
+  detail: string;
+}
+
 export interface ContentFrontmatter {
   title: string;
   slug: string;
@@ -13,6 +34,17 @@ export interface ContentFrontmatter {
   repoUrl?: string;
   featured?: boolean;
   gallery?: ProjectImage[];
+  status?: ProjectStatus;
+  role?: string;
+  timeframe?: string;
+  coverVideo?: string;
+  techStack?: TechStackItem[];
+  demoVideoUrl?: string;
+  problem?: string;
+  approach?: string;
+  challenges?: ProjectChallenge[];
+  results?: string[];
+  architectureDiagram?: string;
 }
 
 export interface ProjectImage {
@@ -22,6 +54,8 @@ export interface ProjectImage {
   width: number;
   height: number;
   layout?: "half" | "portrait" | "wide";
+  type?: "image" | "video";
+  kind?: "screenshot" | "diagram";
 }
 
 export interface ContentItem {

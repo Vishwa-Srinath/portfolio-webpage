@@ -4,10 +4,16 @@ export interface Project {
   summary: string;
   date: string;
   tags: string[];
-  coverImage: string;
+  coverImage?: string;
+  coverVideo?: string;
   liveUrl?: string;
   repoUrl?: string;
   featured: boolean;
+  status?: "shipped" | "in-progress" | "archived";
+  role?: string;
+  timeframe?: string;
+  problem?: string;
+  approach?: string;
 }
 
 export interface Article {

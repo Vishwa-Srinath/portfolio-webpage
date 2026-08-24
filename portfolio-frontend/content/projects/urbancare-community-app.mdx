@@ -6,6 +6,26 @@ date: "2026-03-07"
 tags: ["Java", "OOP", "UML", "OOAD", "Android", "Cloud Architecture"]
 repoUrl: "https://github.com/Vishwa-Srinath/UrbanCare-Community-App"
 featured: true
+coverImage: "/images/projects/urbancare/submit-complaint.jpg"
+# Details still needed from Vishwa: status, role, timeframe, live/demo URL, and measured outcomes.
+role: ""
+timeframe: ""
+techStack:
+  - { name: "Java", category: "backend" }
+  - { name: "Android", category: "frontend" }
+  - { name: "PostgreSQL", category: "database" }
+  - { name: "PostGIS", category: "database", note: "Used with a GiST index for distance-based complaint discovery." }
+  - { name: "Cloud Architecture", category: "infra" }
+problem: "Citizens need a clear way to report road damage, waste-management problems, streetlight failures, and other public issues while authorities need a coordinated resolution workflow."
+approach: "Modeled a community infrastructure platform with location-aware mobile reporting, an authority-facing management dashboard, notifications, and issue-resolution workflows."
+challenges:
+  - title: "Returning relevant nearby complaints efficiently"
+    detail: "Designed geospatial filtering around PostGIS, a GiST index, a configurable radius, and distance-based result ordering."
+results:
+  - "Designed the citizen mobile-reporting and authority dashboard workflows."
+  - "Defined the notification and issue-resolution flows."
+  - "Documented the system structure and interactions with UML and relational models."
+architectureDiagram: "/images/projects/urbancare/geofencing-optimization.jpg"
 gallery:
   - src: "/images/projects/urbancare/database-schema.jpg"
     alt: "UrbanCare PostgreSQL relational database schema"
@@ -13,37 +33,34 @@ gallery:
     width: 800
     height: 450
     layout: "half"
-  - src: "/images/projects/urbancare/geofencing-optimization.jpg"
-    alt: "UrbanCare geofencing optimization architecture diagram"
-    caption: "Geospatial complaint filtering using PostGIS, a GiST index, and distance-based result ordering."
-    width: 800
-    height: 455
-    layout: "half"
+    kind: "diagram"
   - src: "/images/projects/urbancare/report-location.jpg"
     alt: "UrbanCare mobile complaint location and image form"
     caption: "Location-aware mobile reporting flow with map selection and photographic evidence."
     width: 738
     height: 1600
     layout: "portrait"
+    kind: "screenshot"
   - src: "/images/projects/urbancare/submit-complaint.jpg"
     alt: "UrbanCare mobile complaint submission form"
     caption: "Structured complaint submission with category, description, coordinates, and map confirmation."
     width: 738
     height: 1600
     layout: "portrait"
+    kind: "screenshot"
 ---
 
-## Overview
+## Project context
 
 UrbanCare is a modeled community infrastructure platform for reporting road damage, waste-management problems, streetlight failures, and other public issues. Citizens submit reports through a mobile experience while authorities coordinate resolution from a centralized dashboard.
 
-## Architecture Work
+## Design work
 
 - Applied object-oriented analysis and design principles to model a scalable system
 - Designed the mobile reporting and authority-facing web dashboard flows
 - Defined notification and issue-resolution workflows
 - Used UML to document the system's structure and interactions
 
-## Technology
+## Technical scope
 
 The project focuses on Java and object-oriented programming, UML, OOAD, Android application design, web dashboard architecture, and cloud-backend concepts.
