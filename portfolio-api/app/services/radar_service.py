@@ -1,5 +1,6 @@
 import logging
-from typing import Optional, List, Dict, Any
+from typing import Any, Dict, List, Optional
+
 from app.services.supabase_service import get_supabase_client
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,10 @@ async def get_radar_entries(
         if category:
             query = query.eq("category", category)
         response = query.order("entry_date", desc=True).execute()
-        return response.data or []
+        return [
+            {**entry, "tags": entry.get("tags") or []}
+            for entry in (response.data or [])
+        ]
     except Exception as e:
         logger.error(f"Error fetching Tech Radar entries: {e}")
         return []
