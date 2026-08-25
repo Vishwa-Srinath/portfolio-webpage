@@ -27,7 +27,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
   return (
     <main className="mx-auto max-w-5xl px-4 py-16">
       <header className="mb-10">
-        <p className="mb-3 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent-cyan)]">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent-cyan)]">
           Selected engineering work
         </p>
         <h1 className="text-4xl font-bold text-[var(--fg)] md:text-5xl">Projects</h1>

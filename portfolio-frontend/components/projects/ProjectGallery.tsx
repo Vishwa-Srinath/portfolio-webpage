@@ -22,7 +22,7 @@ export function ProjectGallery({ images }: Props) {
   return (
     <section aria-labelledby="project-gallery-heading" className="mb-14">
       <div className="mb-5">
-        <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
           Visual walkthrough
         </p>
         <h2 id="project-gallery-heading" className="text-2xl font-bold text-[var(--fg)]">

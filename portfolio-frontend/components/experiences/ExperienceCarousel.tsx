@@ -226,7 +226,7 @@ export function ExperienceCarousel({ experiences }: Props) {
                   className="flex h-full min-h-[18rem] items-center justify-center p-8"
                 >
                   <div className="text-center">
-                    <span className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent-violet)]">
+                    <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent-violet)]">
                       {categoryLabel}
                     </span>
                     <span className="mx-auto mt-5 block h-px w-16 bg-[var(--border)]" />
@@ -244,7 +244,7 @@ export function ExperienceCarousel({ experiences }: Props) {
                 <span
                   aria-live={isActivelyRotating ? "off" : "polite"}
                   aria-atomic="true"
-                  className="shrink-0 font-mono text-[0.68rem] uppercase tracking-[0.12em] text-[var(--fg-muted)]"
+                  className="shrink-0 text-[0.68rem] font-medium uppercase tracking-[0.12em] text-[var(--fg-muted)]"
                 >
                   Photo {position.imageIndex + 1} / {activeExperience.images.length}
                 </span>
@@ -278,7 +278,7 @@ export function ExperienceCarousel({ experiences }: Props) {
           </figure>
 
           <div className="flex min-w-0 flex-col p-6 sm:p-8">
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
               {categoryLabel} ·{" "}
               <time dateTime={activeExperience.date}>{activeExperience.dateLabel}</time>
             </p>
@@ -298,7 +298,7 @@ export function ExperienceCarousel({ experiences }: Props) {
             </p>
 
             <div className="mt-5 border-l-2 border-[var(--accent-violet)] pl-4">
-              <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[var(--fg-muted)]">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[var(--fg-muted)]">
                 Contribution
               </p>
               <p className="mt-1.5 text-sm leading-6 text-[var(--fg)]">
@@ -308,7 +308,7 @@ export function ExperienceCarousel({ experiences }: Props) {
 
             {activeExperience.outcome && (
               <div className="mt-5">
-                <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[var(--fg-muted)]">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[var(--fg-muted)]">
                   Outcome
                 </p>
                 <p className="mt-1.5 text-sm leading-6 text-[var(--fg)]">
@@ -344,7 +344,7 @@ export function ExperienceCarousel({ experiences }: Props) {
         {canAutoRotate && (
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] px-4 py-3 sm:px-5">
             {prefersReducedMotion ? (
-              <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[var(--fg-muted)]">
+              <span className="text-[0.68rem] font-medium uppercase tracking-[0.14em] text-[var(--fg-muted)]">
                 Manual navigation
               </span>
             ) : (
@@ -377,7 +377,7 @@ export function ExperienceCarousel({ experiences }: Props) {
               <span
                 aria-live={isActivelyRotating ? "off" : "polite"}
                 aria-atomic="true"
-                className="min-w-16 text-center font-mono text-xs text-[var(--fg-muted)]"
+                className="min-w-16 text-center text-xs font-medium tabular-nums text-[var(--fg-muted)]"
               >
                 {slidePosition}
                 <span className="sr-only">: {activeExperience.title}</span>

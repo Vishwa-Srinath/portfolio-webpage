@@ -7,7 +7,7 @@ export function ProjectDocumentation({ documents }: { documents: ProjectDocument
   return (
     <section className="mb-14" aria-labelledby="project-documentation-heading">
       <div className="mb-5">
-        <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
           Supporting material
         </p>
         <h2 id="project-documentation-heading" className="text-2xl font-bold text-[var(--fg)]">
@@ -41,7 +41,7 @@ export function ProjectDocumentation({ documents }: { documents: ProjectDocument
                 </span>
               )}
               {document.provider && (
-                <span className="mt-2 block font-mono text-[0.65rem] uppercase tracking-[0.12em] text-[var(--fg-muted)]">
+                <span className="mt-2 block text-[0.65rem] font-medium uppercase tracking-[0.12em] text-[var(--fg-muted)]">
                   {document.provider}
                 </span>
               )}

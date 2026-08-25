@@ -48,7 +48,7 @@ export function ProjectCard({ project, variant = "default" }: Props) {
             <span className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-3 text-[var(--accent-cyan)] transition-transform duration-300 group-hover:scale-105">
               <Code2 aria-hidden="true" className="h-6 w-6" />
             </span>
-            <span className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-[var(--fg-muted)]">
+            <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--fg-muted)]">
               Project case study
             </span>
           </div>

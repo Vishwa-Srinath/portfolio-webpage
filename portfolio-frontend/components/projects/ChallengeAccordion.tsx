@@ -6,7 +6,7 @@ export function ChallengeAccordion({ challenges }: { challenges: ProjectChalleng
   return (
     <section className="mb-14" aria-labelledby="challenges-heading">
       <div className="mb-5">
-        <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
           Engineering trade-offs
         </p>
         <h2 id="challenges-heading" className="text-2xl font-bold text-[var(--fg)]">

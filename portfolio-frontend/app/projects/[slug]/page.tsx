@@ -133,7 +133,7 @@ export default async function ProjectPage({ params }: Props) {
 
       <header className="mb-8 max-w-4xl">
         <div className="mb-4 flex flex-wrap items-center gap-3">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent-cyan)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent-cyan)]">
             Project case study
           </p>
           {frontmatter.status && (
@@ -151,7 +151,7 @@ export default async function ProjectPage({ params }: Props) {
         </p>
 
         {hasMeta && (
-          <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs text-[var(--fg-muted)]">
+          <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium text-[var(--fg-muted)]">
             {frontmatter.role && <span>{frontmatter.role}</span>}
             {frontmatter.role && frontmatter.timeframe && <span aria-hidden="true">·</span>}
             {frontmatter.timeframe && <span>{frontmatter.timeframe}</span>}
@@ -191,7 +191,7 @@ export default async function ProjectPage({ params }: Props) {
           <div className="flex h-full items-center justify-center bg-[linear-gradient(135deg,var(--bg),var(--bg-elevated))]">
             <div className="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] px-5 py-4 text-[var(--fg-muted)]">
               <CircuitBoard aria-hidden="true" className="h-6 w-6 text-[var(--accent-cyan)]" />
-              <span className="font-mono text-xs uppercase tracking-[0.16em]">Project visual to be added</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.16em]">Project visual to be added</span>
             </div>
           </div>
         )}
@@ -235,7 +235,7 @@ export default async function ProjectPage({ params }: Props) {
       <div className="max-w-4xl">
         {frontmatter.problem && (
           <section className="mb-14" aria-labelledby="problem-heading">
-            <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
               01 · Context
             </p>
             <h2 id="problem-heading" className="text-2xl font-bold text-[var(--fg)]">
@@ -249,7 +249,7 @@ export default async function ProjectPage({ params }: Props) {
 
         {(frontmatter.approach || groupedTech.length > 0) && (
           <section className="mb-14" aria-labelledby="approach-heading">
-            <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
               02 · Solution
             </p>
             <h2 id="approach-heading" className="text-2xl font-bold text-[var(--fg)]">
@@ -264,7 +264,7 @@ export default async function ProjectPage({ params }: Props) {
               <div className="mt-7 grid gap-5 rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] p-5 sm:grid-cols-2">
                 {groupedTech.map((group) => (
                   <div key={group.category}>
-                    <h3 className="mb-2 font-mono text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--fg-muted)]">
+                    <h3 className="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--fg-muted)]">
                       {categoryLabel[group.category]}
                     </h3>
                     <div className="flex flex-wrap gap-1.5">
@@ -302,7 +302,7 @@ export default async function ProjectPage({ params }: Props) {
         {hasDeepDive && (
           <section className="mb-16 border-t border-[var(--border)] pt-12" aria-labelledby="deep-dive-heading">
             <div className="mb-8">
-              <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
                 Detailed notes
               </p>
               <h2 id="deep-dive-heading" className="text-2xl font-bold text-[var(--fg)]">
@@ -348,7 +348,7 @@ export default async function ProjectPage({ params }: Props) {
 
         {frontmatter.tags.length > 0 && (
           <div className="mt-8 flex flex-wrap items-center gap-2">
-            <span className="mr-1 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[var(--fg-muted)]">
+            <span className="mr-1 text-[0.65rem] font-medium uppercase tracking-[0.14em] text-[var(--fg-muted)]">
               Explore related
             </span>
             {frontmatter.tags.map((tag) => (

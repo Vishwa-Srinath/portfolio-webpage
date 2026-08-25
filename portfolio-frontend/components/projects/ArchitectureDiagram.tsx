@@ -17,7 +17,7 @@ export function ArchitectureDiagram({ src, title }: Props) {
   return (
     <section className="mb-14" aria-labelledby="architecture-heading">
       <div className="mb-5">
-        <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
           System view
         </p>
         <h2 id="architecture-heading" className="text-2xl font-bold text-[var(--fg)]">

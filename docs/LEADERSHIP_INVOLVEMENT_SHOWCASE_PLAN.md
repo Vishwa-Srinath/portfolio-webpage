@@ -171,7 +171,7 @@ The section reuses the current design system:
 - text: `--fg` and `--fg-muted`;
 - borders: one-pixel `--border` with a restrained accent highlight;
 - accent: existing cyan for controls and violet for the section eyebrow;
-- typography: the existing bold sans-serif headings and JetBrains Mono technical/category labels;
+- typography: the same Inter family used by the hero throughout the section; size, weight, casing, and spacing provide hierarchy without switching font families;
 - corners: the existing moderate `rounded-2xl` treatment;
 - width and spacing: the same `max-w-5xl`, `px-4`, and `py-16` rhythm as Featured Projects.
 

@@ -6,7 +6,7 @@ export function ResultsList({ results }: { results: string[] }) {
   return (
     <section className="mb-14" aria-labelledby="results-heading">
       <div className="mb-5">
-        <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-cyan)]">
           What changed
         </p>
         <h2 id="results-heading" className="text-2xl font-bold text-[var(--fg)]">

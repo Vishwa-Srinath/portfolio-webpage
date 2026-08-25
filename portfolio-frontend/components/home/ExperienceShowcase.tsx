@@ -16,7 +16,7 @@ export function ExperienceShowcase({ experiences }: Props) {
     >
       <div className="mx-auto max-w-5xl">
         <div className="mb-8 max-w-2xl">
-          <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--accent-violet)]">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-violet)]">
             Beyond the classroom
           </p>
           <h2
