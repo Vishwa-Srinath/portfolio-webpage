@@ -1,0 +1,30 @@
+---
+title: "Exact event, role, or achievement name"
+slug: "replace-with-filename"
+category: "leadership"
+date: "YYYY-MM-DD"
+dateLabel: "Month YYYY"
+role: "Your exact role or responsibility"
+organization: "Department, society, university, or organizer"
+location: "Optional venue, city, or online setting"
+summary: "One factual sentence that gives the event or achievement context."
+contribution: "One factual sentence describing your own responsibility or work."
+outcome: "Optional verified result, recognition, impact, or useful learning."
+featured: true
+published: false
+order: 10
+images:
+  - src: "/images/involvement/replace-with-filename/event-photo.webp"
+    alt: "Describe the meaningful moment and people shown"
+    caption: "Optional context that is not already obvious from the photograph."
+    width: 1600
+    height: 1000
+links:
+  - label: "View certificate"
+    url: "https://drive.google.com/file/d/FILE_ID/view"
+---
+
+## Optional longer notes
+
+This body is reserved for a future involvement archive or detail page. The
+initial homepage showcase uses only the frontmatter above.

@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { BioStrip } from "@/components/home/BioStrip";
 import { FeaturedProjects } from "@/components/home/FeaturedProjects";
-import { LaneTeasers } from "@/components/home/LaneTeasers";
+import { ExperienceShowcase } from "@/components/home/ExperienceShowcase";
 import { getAllContentByType, sortByDate, filterFeatured } from "@/lib/content";
+import { getFeaturedExperiences } from "@/lib/experiences";
 
 export const metadata: Metadata = {
   title: "Vishwa Srinath — CS&E Undergraduate",
@@ -18,7 +19,10 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const projects = await getAllContentByType("projects");
+  const [projects, experiences] = await Promise.all([
+    getAllContentByType("projects"),
+    getFeaturedExperiences(6),
+  ]);
   const featured = sortByDate(filterFeatured(projects), "desc").slice(0, 3);
 
   return (
@@ -26,7 +30,7 @@ export default async function HomePage() {
       <Hero />
       <BioStrip />
       <FeaturedProjects projects={featured} />
-      <LaneTeasers />
+      <ExperienceShowcase experiences={experiences} />
     </>
   );
 }

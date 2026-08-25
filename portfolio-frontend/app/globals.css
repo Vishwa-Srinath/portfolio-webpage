@@ -126,6 +126,22 @@ body {
   background-color: var(--accent-violet);
 }
 
+/* Quiet entry transition for the leadership and involvement showcase. */
+@keyframes involvement-slide-enter {
+  from {
+    opacity: 0.72;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.involvement-slide-enter {
+  animation: involvement-slide-enter var(--transition-slow) both;
+}
+
 /* Prose overrides for MDX content */
 .prose {
   --tw-prose-body: var(--fg);
